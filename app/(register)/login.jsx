@@ -8,13 +8,16 @@ import {
   SubmitErrorHandler,
 } from "react-hook-form";
 import { Pressable } from "react-native";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import Button from "@/components/Button";
 
 const Login = () => {
   const { ...methods } = useForm();
-
-  const onSubmit = (data) => console.log({ data });
+  const router = useRouter();
+  const onSubmit = (data) => {
+    console.log({ data });
+    router.push("/home");
+  };
 
   const onError = (errors, e) => {
     return console.log(errors);
@@ -54,7 +57,6 @@ const Login = () => {
         style={{
           marginHorizontal: "auto",
           width: "65%",
-
           paddingVertical: 10,
         }}
       >
