@@ -25,47 +25,49 @@ const Login = () => {
 
   return (
     <View style={styles.container}>
-      <FormProvider {...methods}>
-        <Text style={styles.heading}>Login</Text>
-        <TextInput
-          name="number"
-          label="Number"
-          keyboardType="phone-pad"
-          placeholder="e.g. +358123123123"
-          rules={{
-            required: "Phone number is required!",
-            pattern: {
-              value: /^[+]?[1-9]\d{1,14}$/,
-              message: "Please enter a valid phone number!",
-            },
+      <View style={styles.centeredContainer}>
+        <FormProvider {...methods}>
+          <Text style={styles.heading}>Login</Text>
+          <TextInput
+            name="number"
+            label="Number"
+            keyboardType="phone-pad"
+            placeholder="e.g. +358123123123"
+            rules={{
+              required: "Phone number is required!",
+              pattern: {
+                value: /^[+]?[1-9]\d{1,14}$/,
+                message: "Please enter a valid phone number!",
+              },
+            }}
+          />
+          <TextInput
+            name="password"
+            label="Password"
+            secureTextEntry
+            rules={{ required: "Password is required!" }}
+          />
+        </FormProvider>
+        <View style={styles.buttonContainer}>
+          <Button
+            title="Login"
+            onPress={methods.handleSubmit(onSubmit, onError)}
+          />
+        </View>
+        <View
+          style={{
+            marginHorizontal: "auto",
+            width: "65%",
+            paddingVertical: 10,
           }}
-        />
-        <TextInput
-          name="password"
-          label="Password"
-          secureTextEntry
-          rules={{ required: "Password is required!" }}
-        />
-      </FormProvider>
-      <View style={styles.buttonContainer}>
-        <Button
-          title="Login"
-          onPress={methods.handleSubmit(onSubmit, onError)}
-        />
-      </View>
-      <View
-        style={{
-          marginHorizontal: "auto",
-          width: "65%",
-          paddingVertical: 10,
-        }}
-      >
-        <Text>
-          Don't have an account?{" "}
-          <Link href="/signup" style={styles.link}>
-            Signup
-          </Link>
-        </Text>
+        >
+          <Text>
+            Don't have an account?{" "}
+            <Link href="/signup" style={styles.link}>
+              Signup
+            </Link>
+          </Text>
+        </View>
       </View>
     </View>
   );
@@ -81,9 +83,12 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     justifyContent: "center",
-    width: "80%",
     marginHorizontal: "auto",
+    width: "100%",
+    alignItems: "center",
+    backgroundColor: "#f1f5f9",
   },
+  centeredContainer: { width: "80%" },
   heading: {
     color: "black",
     fontSize: 42,

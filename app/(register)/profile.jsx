@@ -17,7 +17,7 @@ import { TextInput } from "@/components/TextInput";
 import Button from "@/components/Button";
 import { useRouter } from "expo-router";
 
-const ProfilePage = () => {
+const Profile = () => {
   const [profilePicture, setProfilePicture] = useState(null);
   const [fingerprintVerified, setFingerprintVerified] = useState(false);
   const router = useRouter();
@@ -31,7 +31,6 @@ const ProfilePage = () => {
 
   const onSubmit = (data) => {
     console.log(fingerprintVerified ? { data } : "verify fingerprint");
-    alert("Profile updated successfully!");
     router.push("/home");
   };
 
@@ -66,18 +65,13 @@ const ProfilePage = () => {
     }
   };
 
-  const handleLogout = () => {
-    // Logout logic goes here (e.g., clear session data, navigate to login screen)
-    router.push("/login");
-  };
-
   return (
     <FormProvider {...methods}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView contentContainerStyle={styles.container}>
           <View style={styles.header}>
-            <Text style={styles.heading}>Edit Profile</Text>
-            <Text>Please update your details</Text>
+            <Text style={styles.heading}>Profile</Text>
+            <Text>Please set up your profile</Text>
           </View>
 
           <View style={styles.imageContainer}>
@@ -138,9 +132,6 @@ const ProfilePage = () => {
               title="Save Profile"
               onPress={methods.handleSubmit(onSubmit, onError)}
             />
-            <Pressable onPress={handleLogout} style={styles.logoutButton}>
-              <Text style={styles.logoutText}>Logout</Text>
-            </Pressable>
           </View>
         </ScrollView>
       </TouchableWithoutFeedback>
@@ -148,7 +139,7 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default Profile;
 
 const styles = StyleSheet.create({
   container: {
@@ -157,7 +148,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 40,
     paddingHorizontal: 20,
-    paddingBottom: 20, // To ensure there's space at the bottom when scrolling
+    paddingBottom: 20,
+    backgroundColor: "#f1f5f9",
   },
   header: { marginVertical: 20, marginHorizontal: "auto" },
   heading: {
@@ -184,6 +176,10 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginVertical: 15,
   },
+  fingerprintText: {
+    color: "white",
+    marginLeft: 10,
+  },
   statusText: {
     marginBottom: 20,
   },
@@ -194,18 +190,5 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     borderRadius: 50,
-  },
-  logoutButton: {
-    backgroundColor: "red",
-    padding: 15,
-    borderRadius: 8,
-    marginTop: 20,
-    width: "100%",
-    alignItems: "center",
-  },
-  logoutText: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "bold",
   },
 });

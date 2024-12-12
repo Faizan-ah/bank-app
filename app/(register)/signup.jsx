@@ -23,55 +23,61 @@ const Signup = () => {
 
   return (
     <View style={styles.container}>
-      <FormProvider {...methods}>
-        <Text style={styles.heading}>Sign Up</Text>
+      <View style={styles.centeredContainer}>
+        <FormProvider {...methods}>
+          <Text style={styles.heading}>Sign Up</Text>
 
-        <TextInput
-          name="number"
-          label="Number"
-          keyboardType="phone-pad"
-          placeholder="e.g. +358123123123"
-          rules={{
-            required: "Phone number is required!",
-            pattern: {
-              value: /^[+]?[1-9]\d{1,14}$/,
-              message: "Please enter a valid phone number!",
-            },
-          }}
-        />
-        <TextInput
-          name="password"
-          label="Password"
-          secureTextEntry
-          rules={{ required: "Password is required!" }}
-        />
+          <TextInput
+            name="number"
+            label="Number"
+            keyboardType="phone-pad"
+            placeholder="e.g. +358123123123"
+            rules={{
+              required: "Phone number is required!",
+              pattern: {
+                value: /^[+]?[1-9]\d{1,14}$/,
+                message: "Please enter a valid phone number!",
+              },
+            }}
+          />
+          <TextInput
+            name="password"
+            label="Password"
+            secureTextEntry
+            rules={{ required: "Password is required!" }}
+          />
 
-        <TextInput
-          name="confirmPassword"
-          label="Confirm Password"
-          secureTextEntry
-          rules={{
-            required: "Password confirmation is required!",
-            validate: (val) =>
-              methods.watch("password") === val || "Passwords do not match",
+          <TextInput
+            name="confirmPassword"
+            label="Confirm Password"
+            secureTextEntry
+            rules={{
+              required: "Password confirmation is required!",
+              validate: (val) =>
+                methods.watch("password") === val || "Passwords do not match",
+            }}
+          />
+        </FormProvider>
+        <View style={styles.buttonContainer}>
+          <Button
+            title="Signup"
+            onPress={methods.handleSubmit(onSubmit, onError)}
+          />
+        </View>
+        <View
+          style={{
+            marginHorizontal: "auto",
+            width: "65%",
+            paddingVertical: 10,
           }}
-        />
-      </FormProvider>
-      <View style={styles.buttonContainer}>
-        <Button
-          title="Signup"
-          onPress={methods.handleSubmit(onSubmit, onError)}
-        />
-      </View>
-      <View
-        style={{ marginHorizontal: "auto", width: "65%", paddingVertical: 10 }}
-      >
-        <Text>
-          Already have an account?{" "}
-          <Link href="/login" style={styles.link}>
-            Login
-          </Link>
-        </Text>
+        >
+          <Text>
+            Already have an account?{" "}
+            <Link href="/login" style={styles.link}>
+              Login
+            </Link>
+          </Text>
+        </View>
       </View>
     </View>
   );
@@ -84,9 +90,12 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     justifyContent: "center",
-    width: "80%",
     marginHorizontal: "auto",
+    width: "100%",
+    alignItems: "center",
+    backgroundColor: "#f1f5f9",
   },
+  centeredContainer: { width: "80%" },
   heading: {
     color: "black",
     fontSize: 42,
