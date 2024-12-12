@@ -64,7 +64,7 @@ const RequestsList = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Requests Sent To You</Text>
+      <Text style={styles.title}>Requests</Text>
 
       <FlatList
         data={requests}
@@ -88,6 +88,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
+    textAlign: "center",
   },
   requestItem: {
     backgroundColor: "#ffffff",

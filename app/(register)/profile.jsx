@@ -17,7 +17,7 @@ import { TextInput } from "@/components/TextInput";
 import Button from "@/components/Button";
 import { useRouter } from "expo-router";
 
-const Profile = () => {
+const ProfilePage = () => {
   const [profilePicture, setProfilePicture] = useState(null);
   const [fingerprintVerified, setFingerprintVerified] = useState(false);
   const router = useRouter();
@@ -31,6 +31,7 @@ const Profile = () => {
 
   const onSubmit = (data) => {
     console.log(fingerprintVerified ? { data } : "verify fingerprint");
+    alert("Profile updated successfully!");
     router.push("/home");
   };
 
@@ -65,13 +66,18 @@ const Profile = () => {
     }
   };
 
+  const handleLogout = () => {
+    // Logout logic goes here (e.g., clear session data, navigate to login screen)
+    router.push("/login");
+  };
+
   return (
     <FormProvider {...methods}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView contentContainerStyle={styles.container}>
           <View style={styles.header}>
-            <Text style={styles.heading}>Profile</Text>
-            <Text>Please set up your profile</Text>
+            <Text style={styles.heading}>Edit Profile</Text>
+            <Text>Please update your details</Text>
           </View>
 
           <View style={styles.imageContainer}>
@@ -132,6 +138,9 @@ const Profile = () => {
               title="Save Profile"
               onPress={methods.handleSubmit(onSubmit, onError)}
             />
+            <Pressable onPress={handleLogout} style={styles.logoutButton}>
+              <Text style={styles.logoutText}>Logout</Text>
+            </Pressable>
           </View>
         </ScrollView>
       </TouchableWithoutFeedback>
@@ -139,7 +148,7 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default ProfilePage;
 
 const styles = StyleSheet.create({
   container: {
@@ -175,10 +184,6 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginVertical: 15,
   },
-  fingerprintText: {
-    color: "white",
-    marginLeft: 10,
-  },
   statusText: {
     marginBottom: 20,
   },
@@ -189,5 +194,18 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     borderRadius: 50,
+  },
+  logoutButton: {
+    backgroundColor: "red",
+    padding: 15,
+    borderRadius: 8,
+    marginTop: 20,
+    width: "100%",
+    alignItems: "center",
+  },
+  logoutText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });

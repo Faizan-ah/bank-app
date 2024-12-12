@@ -6,12 +6,10 @@ const Home = () => {
   const router = useRouter();
 
   const handleSendMoney = () => {
-    // Navigate to Send Money Screen (create this screen separately)
     router.push("/send-money");
   };
 
   const handleRequestMoney = () => {
-    // Navigate to Receive Money Screen (create this screen separately)
     router.push("/request-money");
   };
 
@@ -45,47 +43,53 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
-    backgroundColor: "#f0f4f8",
+    backgroundColor: "#f1f5f9",
   },
   heading: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "bold",
+    color: "#333",
     marginBottom: 20,
+    textAlign: "center",
   },
   balanceContainer: {
-    marginVertical: 20,
+    marginVertical: 30,
     alignItems: "center",
-    padding: 20,
+    padding: 30,
     backgroundColor: "white",
-    borderRadius: 10,
+    borderRadius: 20,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
     elevation: 5,
+    width: "100%",
+    maxWidth: 350,
   },
   balanceText: {
     fontSize: 18,
-    color: "#555",
+    color: "#777",
   },
   balanceAmount: {
-    fontSize: 32,
+    fontSize: 36,
     fontWeight: "bold",
     color: "#2c3e50",
     marginTop: 10,
   },
   buttonContainer: {
-    marginTop: 30,
+    marginTop: 40,
     width: "100%",
+    maxWidth: 350,
   },
   button: {
     backgroundColor: "#007bff",
     padding: 15,
     borderRadius: 8,
     alignItems: "center",
-    marginVertical: 10,
+    marginBottom: 15,
     width: "100%",
   },
+
   buttonText: {
     color: "white",
     fontSize: 18,

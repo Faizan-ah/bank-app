@@ -33,8 +33,15 @@ const ControlledInput = (props) => {
     formState: { errors },
   } = formContext;
 
-  const { name, label, rules, defaultValue, secureTextEntry, ...inputProps } =
-    props;
+  const {
+    name,
+    label,
+    rules,
+    defaultValue,
+    secureTextEntry,
+    disabled,
+    ...inputProps
+  } = props;
 
   const { field } = useController({ name, rules, defaultValue });
 
@@ -47,22 +54,24 @@ const ControlledInput = (props) => {
       {label && <Text style={styles.label}>{label}</Text>}
       <View style={styles.inputContainer}>
         <RNTextInput
-          style={styles.input}
+          style={[styles.input, disabled && styles.disabledInput]} // Add disabled style
           onChangeText={field.onChange}
           onBlur={field.onBlur}
           value={field.value}
           secureTextEntry={secureTextEntry && !isPasswordVisible}
+          editable={!disabled} // Make the input field non-editable if disabled
           {...inputProps}
         />
-        {secureTextEntry && (
-          <Pressable onPress={togglePasswordVisibility} style={styles.icon}>
-            <MaterialIcons
-              name={isPasswordVisible ? "visibility" : "visibility-off"}
-              size={24}
-              color="gray"
-            />
-          </Pressable>
-        )}
+        {secureTextEntry &&
+          !disabled && ( // Only show the password visibility icon if not disabled
+            <Pressable onPress={togglePasswordVisibility} style={styles.icon}>
+              <MaterialIcons
+                name={isPasswordVisible ? "visibility" : "visibility-off"}
+                size={24}
+                color="gray"
+              />
+            </Pressable>
+          )}
       </View>
       {errors[name] && <Text style={styles.error}>{errors[name].message}</Text>}
     </View>
@@ -102,5 +111,10 @@ const styles = StyleSheet.create({
     color: "red",
     fontSize: 12,
     marginTop: 5,
+  },
+  disabledInput: {
+    backgroundColor: "#f0f0f0",
+    color: "#888",
+    borderColor: "#ddd",
   },
 });
