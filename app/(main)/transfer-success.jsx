@@ -1,5 +1,12 @@
-import React, { useRef, useState } from "react";
-import { View, Text, StyleSheet, Pressable, Share } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  Share,
+  BackHandler,
+} from "react-native";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import LottieView from "lottie-react-native"; // For animated checkmark
@@ -57,6 +64,18 @@ const TransferSuccess = () => {
   const handleBack = () => {
     router.push("/home"); // Navigate back to home or another screen
   };
+
+  useEffect(() => {
+    const backAction = () => {
+      handleBack();
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+    return () => backHandler.remove();
+  }, []);
 
   return (
     <View style={styles.container}>

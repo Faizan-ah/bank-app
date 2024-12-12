@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tabs } from "expo-router";
 import { Alert, BackHandler } from "react-native";
@@ -26,6 +27,16 @@ export default function TabLayout() {
               { text: "Yes", onPress: () => BackHandler.exitApp() },
             ]);
           },
+        }}
+      />
+      <Tabs.Screen
+        name="request"
+        options={{
+          title: "Requests",
+          headerShown: false,
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="swap-vertical" size={28} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
