@@ -45,11 +45,12 @@ export default RequestSuccess;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#f9fbfc",
     padding: 20,
+    height: "100%",
   },
   iconContainer: {
     marginBottom: 10,

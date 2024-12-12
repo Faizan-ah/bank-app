@@ -150,6 +150,7 @@ const styles = StyleSheet.create({
     paddingTop: 40,
     paddingHorizontal: 20,
     paddingBottom: 20,
+    backgroundColor: "#f1f5f9",
   },
   header: { marginVertical: 20, marginHorizontal: "auto" },
   heading: {

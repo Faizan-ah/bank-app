@@ -139,7 +139,7 @@ export default ConfirmTransfer;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f0f4f8",
+    backgroundColor: "#f1f5f9",
     paddingHorizontal: 20,
     paddingTop: 80,
   },

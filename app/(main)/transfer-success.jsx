@@ -135,7 +135,7 @@ const TransferSuccess = () => {
         style={styles.shareButton}
       >
         <MaterialIcons name="share" size={20} color="white" />
-        <Text style={styles.shareText}>Share Receipt</Text>
+        <Text style={styles.shareText}>Share </Text>
       </Pressable>
     </View>
   );
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
   successText: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#2c3e50",
+    color: "white",
     marginVertical: 10,
     textAlign: "center",
   },
@@ -193,9 +193,9 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   card: {
-    width: "100%", // Make sure the card width is 100% of its parent container
-    maxWidth: 400, // Limit the card width if needed
-    backgroundColor: "#ffffff",
+    width: "100%",
+    maxWidth: 400,
+    backgroundColor: "#1d2b5f",
     borderRadius: 10,
     padding: 20,
     shadowColor: "#000",
@@ -203,17 +203,17 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 5,
     elevation: 2,
-    overflow: "hidden", // Prevent overflow of content
+    overflow: "hidden",
   },
   label: {
     fontSize: 14,
-    color: "#555",
+    color: "white",
     marginBottom: 5,
   },
   value: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#000",
+    color: "white",
     marginBottom: 15,
   },
   detailsRow: {

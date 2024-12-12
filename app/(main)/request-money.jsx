@@ -69,7 +69,8 @@ const RequestMoney = () => {
       <FormProvider {...methods}>
         <TextInput
           name="number"
-          placeholder="Phone Number"
+          label="Phone Number"
+          placeholder="Enter phone number"
           keyboardType="phone-pad"
           rules={{ required: "Phone number is required!" }}
         />
@@ -100,8 +101,8 @@ export default RequestMoney;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#f0f4f8",
+    flexGrow: 1,
+    backgroundColor: "#f1f5f9",
     paddingHorizontal: 20,
     paddingTop: 80,
   },
