@@ -4,10 +4,15 @@ import { TextInput } from "@/components/TextInput";
 import { useForm, FormProvider } from "react-hook-form";
 import { MaterialIcons } from "@expo/vector-icons";
 import Button from "@/components/Button";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 
 const AddPhone = () => {
-  const methods = useForm();
+  const { phone } = useLocalSearchParams();
+  const methods = useForm({
+    defaultValues: {
+      number: phone || "",
+    },
+  });
   const router = useRouter();
 
   const onSubmit = (data) => {
@@ -37,7 +42,7 @@ const AddPhone = () => {
         </Pressable>
         <Text style={styles.heading}>Phone Number</Text>
       </View>
-      <Text style={styles.text}>Please add your mobile phone number</Text>
+      <Text style={styles.text}>Please confirm your mobile phone number</Text>
       <FormProvider {...methods}>
         <TextInput
           name="number"
