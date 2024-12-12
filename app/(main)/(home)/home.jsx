@@ -10,9 +10,9 @@ const Home = () => {
     router.push("/send-money");
   };
 
-  const handleReceiveMoney = () => {
+  const handleRequestMoney = () => {
     // Navigate to Receive Money Screen (create this screen separately)
-    router.push("/receive-money");
+    router.push("/request-money");
   };
 
   return (
@@ -29,8 +29,8 @@ const Home = () => {
           <Text style={styles.buttonText}>Send Money</Text>
         </Pressable>
 
-        <Pressable style={styles.button} onPress={handleReceiveMoney}>
-          <Text style={styles.buttonText}>Receive Money</Text>
+        <Pressable style={styles.button} onPress={handleRequestMoney}>
+          <Text style={styles.buttonText}>Request Money</Text>
         </Pressable>
       </View>
     </View>

@@ -9,11 +9,12 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.faizan.ah.bankapp"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/play_store_513.png",  
+        "foregroundImage": "./assets/images/loading-icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.faizan.ah.bankapp"
@@ -21,7 +22,7 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/loading-icon.png"
     },
     "plugins": [
       "expo-router",

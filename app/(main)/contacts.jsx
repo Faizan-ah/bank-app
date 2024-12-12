@@ -21,7 +21,7 @@ const ContactsList = () => {
   const [isSelecting, setIsSelecting] = useState(false);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const { amount } = useLocalSearchParams();
+  const { amount, returnTo } = useLocalSearchParams();
 
   useEffect(() => {
     (async () => {
@@ -55,7 +55,7 @@ const ContactsList = () => {
 
   const handleContactPress = (contact) => {
     router.push({
-      pathname: "/send-money",
+      pathname: returnTo,
       params: {
         phoneNumber: contact.phoneNumbers[0].number,
         amount,

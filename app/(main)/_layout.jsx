@@ -6,6 +6,8 @@ export default function _layout() {
     <Stack>
       <Stack.Screen name="(home)" options={{ headerShown: false }} />
       <Stack.Screen name="send-money" options={{ headerShown: false }} />
+      <Stack.Screen name="request-money" options={{ headerShown: false }} />
+      <Stack.Screen name="request-success" options={{ headerShown: false }} />
       <Stack.Screen name="confirm-transfer" options={{ headerShown: false }} />
       <Stack.Screen name="transfer-success" options={{ headerShown: false }} />
       <Stack.Screen name="contacts" options={{ headerShown: false }} />
