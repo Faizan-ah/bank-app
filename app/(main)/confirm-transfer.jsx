@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Pressable, Image, Alert } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  Image,
+  Keyboard,
+  ScrollView,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { useForm, FormProvider } from "react-hook-form";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -10,7 +19,7 @@ import AwesomeAlert from "react-native-awesome-alerts";
 
 const ConfirmTransfer = () => {
   const [showAlert, setShowAlert] = useState(false);
-  const [resetSwipe, setResetSwipe] = useState(false); // State to control swipe reset
+  const [resetSwipe, setResetSwipe] = useState(false);
   const methods = useForm({
     defaultValues: {
       message: "",
@@ -50,54 +59,59 @@ const ConfirmTransfer = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Pressable onPress={handleBackPress} style={styles.backButton}>
-          <MaterialIcons name="arrow-back" size={24} color="white" />
-        </Pressable>
-        <Text style={styles.heading}>Confirm Transfer</Text>
-      </View>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <View style={styles.header}>
+            <Pressable onPress={handleBackPress} style={styles.backButton}>
+              <MaterialIcons name="arrow-back" size={24} color="white" />
+            </Pressable>
+            <Text style={styles.heading}>Confirm Transfer</Text>
+          </View>
 
-      <View style={styles.content}>
-        <Image
-          source={{
-            uri:
-              avatarUrl ||
-              `https://ui-avatars.com/api/?name=${"dm"}&background=random`,
-          }}
-          style={styles.avatar}
-        />
-        <Text style={styles.name}>{"dummy name"}</Text>
-        <Text style={styles.account}>{"dummy account number"}</Text>
-        <Text style={styles.amount}>$235.05</Text>
-        <Text style={styles.account}>Transfer charges: $0.25</Text>
-        <FormProvider {...methods}>
-          <Text style={styles.label}>Message/Reference?</Text>
-          <TextInput
-            name="message"
-            style={styles.input}
-            placeholderTextColor="blue"
-            multiline
-          />
-        </FormProvider>
-      </View>
+          <View style={styles.content}>
+            <Image
+              source={{
+                uri:
+                  avatarUrl ||
+                  `https://ui-avatars.com/api/?name=${"dm"}&background=random`,
+              }}
+              style={styles.avatar}
+            />
+            <Text style={styles.name}>{"dummy name"}</Text>
+            <Text style={styles.account}>{"dummy account number"}</Text>
+            <Text style={styles.amount}>$235.05</Text>
+            <Text style={styles.account}>Transfer charges: $0.25</Text>
 
-      <View style={styles.footer}>
-        <SwipeButton
-          thumbIconBackgroundColor="#ffffff"
-          thumbIconBorderColor="#007bff"
-          thumbIconComponent={() => (
-            <MaterialIcons name="chevron-right" size={24} color="#007bff" />
-          )}
-          onSwipeSuccess={handleSwipe}
-          containerStyles={styles.swipeContainer}
-          railBackgroundColor="#007bff"
-          title="Send"
-          titleStyles={styles.titleStyle}
-          titleColor="#ffffff"
-          titleFontSize={18}
-          shouldResetAfterSuccess={resetSwipe}
-        />
-      </View>
+            <FormProvider {...methods}>
+              <Text style={styles.label}>Message/Reference?</Text>
+              <TextInput
+                name="message"
+                style={styles.input}
+                placeholderTextColor="blue"
+                multiline
+              />
+            </FormProvider>
+          </View>
+
+          <View style={styles.swipeContainer}>
+            <SwipeButton
+              thumbIconBackgroundColor="#ffffff"
+              thumbIconBorderColor="#007bff"
+              thumbIconComponent={() => (
+                <MaterialIcons name="chevron-right" size={24} color="#007bff" />
+              )}
+              onSwipeSuccess={handleSwipe}
+              containerStyles={styles.swipeButtonContainer}
+              railBackgroundColor="#007bff"
+              title="Send"
+              titleStyles={styles.titleStyle}
+              titleColor="#ffffff"
+              titleFontSize={18}
+              shouldResetAfterSuccess={resetSwipe}
+            />
+          </View>
+        </ScrollView>
+      </TouchableWithoutFeedback>
 
       <AwesomeAlert
         show={showAlert}
@@ -128,6 +142,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0f4f8",
     paddingHorizontal: 20,
     paddingTop: 80,
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: "flex-start",
+    paddingBottom: 80,
   },
   header: {
     flexDirection: "row",
@@ -179,19 +198,18 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     fontSize: 16,
   },
-  footer: {
-    padding: 10,
-    paddingBottom: 80,
-    width: "100%",
-    backgroundColor: "#f0f4f8",
-  },
   swipeContainer: {
+    marginTop: 20,
+    width: "100%",
+    padding: 10,
+  },
+  swipeButtonContainer: {
     width: "100%",
     borderRadius: 20,
     overflow: "hidden",
-    marginTop: 10,
-    borderWidth: 0,
     padding: 5,
+    marginRight: 55,
+    borderWidth: 0,
   },
   titleStyle: { fontWeight: "bold" },
 });
