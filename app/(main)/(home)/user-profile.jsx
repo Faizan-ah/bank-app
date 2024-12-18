@@ -16,6 +16,7 @@ import { useForm, FormProvider } from "react-hook-form";
 import { TextInput } from "@/components/TextInput";
 import Button from "@/components/Button";
 import { useRouter } from "expo-router";
+import { removeItem } from "@/utils/storage";
 
 const ProfilePage = () => {
   const [profilePicture, setProfilePicture] = useState(null);
@@ -66,8 +67,13 @@ const ProfilePage = () => {
     }
   };
 
-  const handleLogout = () => {
-    router.push("/login");
+  const handleLogout = async () => {
+    try {
+      await removeItem("authToken");
+      router.push("/login");
+    } catch (error) {
+      console.error("Error removing login status:", error);
+    }
   };
 
   return (

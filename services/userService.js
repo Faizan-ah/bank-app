@@ -16,3 +16,13 @@ export const getUser = async () => {
     throw error.response ? error.response.data : error.message;
   }
 };
+
+export const getUserByCredentials = async (body) => {
+  const url = `${API_URL}/users/reciever?identifier=${body.identifier}&phone=${body.phone}&account=${body.account}&nin=${body.nin}`;
+  try {
+    const response = await axios.get(url);
+    return response.data.user;
+  } catch (error) {
+    throw error.response ? error.response.data : error.message;
+  }
+};

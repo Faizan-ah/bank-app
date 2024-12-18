@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   Keyboard,
   ScrollView,
   TouchableWithoutFeedback,
+  ActivityIndicator,
 } from "react-native";
 import { useForm, FormProvider } from "react-hook-form";
 import { useRouter, useLocalSearchParams } from "expo-router";
@@ -16,7 +17,9 @@ import { TextInput } from "@/components/TextInput";
 import SwipeButton from "rn-swipe-button";
 import * as LocalAuthentication from "expo-local-authentication";
 import AwesomeAlert from "react-native-awesome-alerts";
-
+import { getUserByCredentials } from "@/services/userService";
+import { transferMoney } from "@/services/transferService";
+import { getItem } from "@/utils/storage";
 const ConfirmTransfer = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [resetSwipe, setResetSwipe] = useState(false);
@@ -26,7 +29,14 @@ const ConfirmTransfer = () => {
     },
   });
   const router = useRouter();
-  const { name, avatarUrl, account, amount, tax } = useLocalSearchParams();
+  const {
+    recipientIdentifierType,
+    recipientIdentifier,
+    avatarUrl,
+    amount,
+    recieverName,
+    recieverAccount,
+  } = useLocalSearchParams();
 
   const handleBackPress = () => {
     router.back();
@@ -40,14 +50,19 @@ const ConfirmTransfer = () => {
       });
 
       if (biometricAuth.success) {
-        console.log({
+        const user = await getItem("user");
+        const transferData = {
+          senderId: user.id,
+          recipientIdentifier,
+          recipientIdentifierType,
+          amount: Number(amount),
           message: methods.getValues("message"),
-          amount,
-          account,
-        });
-        router.push("/transfer-success");
+        };
+        const response = await transferMoney(transferData);
+        if (response.status === 200) {
+          router.push("/transfer-success");
+        }
       } else {
-        console.log("here");
         setShowAlert(true);
         setResetSwipe(true);
       }
@@ -73,13 +88,15 @@ const ConfirmTransfer = () => {
               source={{
                 uri:
                   avatarUrl ||
-                  `https://ui-avatars.com/api/?name=${"dm"}&background=random`,
+                  (recieverName
+                    ? `https://ui-avatars.com/api/?name=${recieverName}&background=random`
+                    : "default-avatar-url"),
               }}
               style={styles.avatar}
             />
-            <Text style={styles.name}>{"dummy name"}</Text>
-            <Text style={styles.account}>{"dummy account number"}</Text>
-            <Text style={styles.amount}>$235.05</Text>
+            <Text style={styles.name}>{recieverName ?? "-"}</Text>
+            <Text style={styles.account}>{recieverAccount ?? "-"}</Text>
+            <Text style={styles.amount}>${amount}</Text>
             <Text style={styles.account}>Transfer charges: $0.25</Text>
 
             <FormProvider {...methods}>
@@ -108,6 +125,7 @@ const ConfirmTransfer = () => {
               titleColor="#ffffff"
               titleFontSize={18}
               shouldResetAfterSuccess={resetSwipe}
+              railStyles={styles.railStyles}
             />
           </View>
         </ScrollView>
@@ -207,9 +225,11 @@ const styles = StyleSheet.create({
     width: "100%",
     borderRadius: 20,
     overflow: "hidden",
-    padding: 5,
+    padding: 10,
     marginRight: 55,
     borderWidth: 0,
+    backgroundColor: "red",
   },
   titleStyle: { fontWeight: "bold" },
+  railStyles: { backgroundColor: "transparent", borderWidth: 0 },
 });

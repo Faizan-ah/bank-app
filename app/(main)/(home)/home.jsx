@@ -5,29 +5,40 @@ import {
   StyleSheet,
   Pressable,
   ActivityIndicator,
+  RefreshControl,
+  ScrollView,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { getUser } from "@/services/userService";
+import { saveItem } from "@/utils/storage";
 
 const Home = () => {
   const router = useRouter();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchUserData = async () => {
+    try {
+      const userData = await getUser();
+      await saveItem("user", userData);
+      setUser(userData);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const userData = await getUser();
-        setUser(userData);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchUserData();
   }, []);
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    fetchUserData();
+  };
   const handleSendMoney = () => {
     router.push("/send-money");
   };
@@ -53,14 +64,17 @@ const Home = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+      }
+    >
       <Text style={styles.heading}>Welcome to Your Bank</Text>
-
       <View style={styles.balanceContainer}>
         <Text style={styles.balanceText}>Available Balance</Text>
         <Text style={styles.balanceAmount}>{user.balance}</Text>
       </View>
-
       <View style={styles.buttonContainer}>
         <Pressable style={styles.button} onPress={handleSendMoney}>
           <Text style={styles.buttonText}>Send Money</Text>
@@ -70,7 +84,7 @@ const Home = () => {
           <Text style={styles.buttonText}>Request Money</Text>
         </Pressable>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

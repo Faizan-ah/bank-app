@@ -14,21 +14,34 @@ import RNPickerSelect from "react-native-picker-select";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { TextInput } from "@/components/TextInput";
 import AwesomeAlert from "react-native-awesome-alerts";
+import { getItem } from "@/utils/storage";
+import { getUserByCredentials } from "@/services/userService";
 
 const SendMoney = () => {
   const [selectedMethod, setSelectedMethod] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [availableBalance, setAvailableBalance] = useState("");
+  const [reciever, setReciever] = useState();
+
   const methods = useForm({
     defaultValues: {
       amount: "",
       number: "",
-      accountNumber: "",
+      account: "",
       nin: "",
     },
   });
   const router = useRouter();
   const { phoneNumber, amount } = useLocalSearchParams();
-  const availableBalance = "₦285,856.20";
+
+  useEffect(() => {
+    const currentBalance = async () => {
+      const user = await getItem("user");
+      setAvailableBalance(user.balance);
+    };
+    currentBalance();
+  }, []);
 
   useEffect(() => {
     if (phoneNumber) {
@@ -47,11 +60,36 @@ const SendMoney = () => {
       },
     });
   };
+  const confirmUserExistsAndPush = async () => {
+    try {
+      const currentInput =
+        selectedMethod === "phone" ? "number" : selectedMethod;
+      setLoading(true);
+      const body = {
+        identifier: selectedMethod,
+        [selectedMethod]: methods.getValues(currentInput),
+      };
+      const user = await getUserByCredentials(body);
+      setLoading(false);
+      router.push({
+        pathname: "/confirm-transfer",
+        params: {
+          recipientIdentifierType: selectedMethod,
+          recipientIdentifier: methods.getValues(currentInput),
+          amount: methods.getValues("amount"),
+          recieverName: user.first_name + " " + user.last_name,
+          recieverAccount: user.account_number,
+        },
+      });
+    } catch (error) {
+      setLoading(false);
+      alert(error.message || "Something went wrong. Please try again.");
+    }
+  };
 
   const onSubmit = (data) => {
-    console.log(data);
     if (selectedMethod) {
-      router.push("/confirm-transfer");
+      confirmUserExistsAndPush();
     } else {
       setShowAlert(true); // Show alert when no method is selected
     }
@@ -70,14 +108,14 @@ const SendMoney = () => {
     setSelectedMethod(value);
 
     if (value === "phone") {
-      methods.setValue("accountNumber", "");
+      methods.setValue("account", "");
       methods.setValue("nin", "");
     } else if (value === "account") {
       methods.setValue("number", "");
       methods.setValue("nin", "");
     } else if (value === "nin") {
       methods.setValue("number", "");
-      methods.setValue("accountNumber", "");
+      methods.setValue("account", "");
     }
   };
 
@@ -95,7 +133,9 @@ const SendMoney = () => {
 
       <View style={styles.balanceContainer}>
         <Text style={styles.label}>Available Balance</Text>
-        <Text style={styles.balance}>{availableBalance}</Text>
+        <Text style={styles.balance}>
+          {availableBalance ? `$${availableBalance}` : "-"}
+        </Text>
       </View>
       <FormProvider {...methods}>
         <TextInput
@@ -103,11 +143,16 @@ const SendMoney = () => {
           style={styles.input}
           placeholder="Enter Amount"
           keyboardType="numeric"
-          rules={{ required: "Amount is required!" }}
+          rules={{
+            required: "Amount is required!",
+            validate: (value) =>
+              Number(value) <= Number(availableBalance) ||
+              "Amount cannot be greater than balance!",
+          }}
         />
 
         <Text style={{ ...styles.label, marginTop: -4, marginBottom: 10 }}>
-          Transfer Charges: 0.046
+          Transfer Charges: $0.25
         </Text>
 
         <Text style={{ ...styles.label, color: "#007bff", fontWeight: "bold" }}>
@@ -148,7 +193,7 @@ const SendMoney = () => {
 
         {selectedMethod === "account" && (
           <TextInput
-            name="accountNumber"
+            name="account"
             style={styles.input}
             placeholder="Enter Account Number"
             keyboardType="numeric"
@@ -167,7 +212,12 @@ const SendMoney = () => {
         )}
       </FormProvider>
       <Pressable
-        style={styles.button}
+        style={
+          !loading
+            ? styles.button
+            : { ...styles.button, backgroundColor: "grey" }
+        }
+        disabled={loading}
         onPress={methods.handleSubmit(onSubmit, onError)}
       >
         <Text style={styles.buttonText}>Next</Text>

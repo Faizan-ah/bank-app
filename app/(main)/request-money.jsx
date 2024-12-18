@@ -46,7 +46,6 @@ const RequestMoney = () => {
   };
 
   const onSubmit = (data) => {
-    console.log(data);
     router.push("/request-success");
   };
 
