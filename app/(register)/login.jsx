@@ -10,13 +10,23 @@ import {
 import { Pressable } from "react-native";
 import { Link, useRouter } from "expo-router";
 import Button from "@/components/Button";
+import { login } from "@/services/authService";
+import { saveItem } from "@/utils/storage";
 
 const Login = () => {
   const { ...methods } = useForm();
   const router = useRouter();
-  const onSubmit = (data) => {
-    console.log({ data });
-    router.push("/home");
+
+  const onSubmit = async (data) => {
+    try {
+      const { number: phoneNumber, password } = data;
+      const response = await login(phoneNumber, password);
+      await saveItem("authToken", response.token);
+      await saveItem("user", response.userDto);
+      router.push("/home");
+    } catch (error) {
+      alert(error.message || "Something went wrong. Please try again.");
+    }
   };
 
   const onError = (errors, e) => {

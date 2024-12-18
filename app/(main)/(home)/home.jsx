@@ -1,10 +1,33 @@
-import React from "react";
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  ActivityIndicator,
+} from "react-native";
 import { useRouter } from "expo-router";
+import { getUser } from "@/services/userService";
 
 const Home = () => {
   const router = useRouter();
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userData = await getUser();
+        setUser(userData);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, []);
   const handleSendMoney = () => {
     router.push("/send-money");
   };
@@ -13,13 +36,29 @@ const Home = () => {
     router.push("/request-money");
   };
 
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#007bff" />
+      </View>
+    );
+  }
+
+  if (!user) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.heading}>Error loading user data.</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Welcome to Your Bank</Text>
 
       <View style={styles.balanceContainer}>
         <Text style={styles.balanceText}>Available Balance</Text>
-        <Text style={styles.balanceAmount}>$5,000.00</Text>
+        <Text style={styles.balanceAmount}>{user.balance}</Text>
       </View>
 
       <View style={styles.buttonContainer}>
