@@ -60,13 +60,24 @@ const ConfirmTransfer = () => {
         };
         const response = await transferMoney(transferData);
         if (response.status === 200) {
-          router.push("/transfer-success");
+          const data = response.data.transactionInfo;
+          console.log(data);
+          router.push({
+            pathname: "/transfer-success",
+            params: {
+              name: data.recipient.first_name + " " + data.recipient.last_name,
+              transactionId: data.id,
+              amount: data.amount,
+              transactionDate: data.transactionDate,
+            },
+          });
         }
       } else {
         setShowAlert(true);
         setResetSwipe(true);
       }
     } catch (error) {
+      console.error(error);
       setShowAlert(true);
       setResetSwipe(true);
     }

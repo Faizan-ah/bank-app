@@ -7,17 +7,19 @@ import {
   Share,
   BackHandler,
 } from "react-native";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import LottieView from "lottie-react-native"; // For animated checkmark
 import { captureRef } from "react-native-view-shot"; // Import the captureRef function
 import * as FileSystem from "expo-file-system"; // For handling file storage
 import * as Sharing from "expo-sharing"; // For sharing images
-
+import { convertTimeZoneToDateFormat } from "@/utils/date";
 const TransferSuccess = () => {
   const router = useRouter();
   const [imageUri, setImageUri] = useState(null); // State to store the captured image URI
   const receiptRef = useRef(); // Ref to capture the receipt card
+  const { name, transactionId, amount, transactionDate } =
+    useLocalSearchParams();
 
   // Function to capture the view as an image
   const captureReceipt = async () => {
@@ -102,27 +104,34 @@ const TransferSuccess = () => {
           {/* Transfer Details Card */}
           <View style={styles.detailsRow}>
             <Text style={styles.label}>Name</Text>
-            <Text style={styles.value}>Rene Wells</Text>
+            <Text style={styles.value}>{name}</Text>
           </View>
 
           <View style={styles.detailsRow}>
             <Text style={styles.label}>Transaction ID</Text>
-            <Text style={styles.value}>ABC123XX</Text>
+            <Text
+              style={[styles.value, { maxWidth: 150, textAlign: "right" }]}
+              numberOfLines={1}
+              ellipsizeMode="middle"
+            >
+              {transactionId}
+            </Text>
           </View>
-
           <View style={styles.detailsRow}>
             <Text style={styles.label}>Amount</Text>
-            <Text style={styles.value}>$650.00</Text>
+            <Text style={styles.value}>${amount}</Text>
           </View>
 
           <View style={styles.detailsRow}>
             <Text style={styles.label}>Transfer Cost</Text>
-            <Text style={styles.value}>$0.02</Text>
+            <Text style={styles.value}>$0.25</Text>
           </View>
 
           <View style={styles.detailsRow}>
             <Text style={styles.label}>Time & Date</Text>
-            <Text style={styles.value}>01/03/22, 11:00 AM</Text>
+            <Text style={styles.value}>
+              {convertTimeZoneToDateFormat(transactionDate)}
+            </Text>
           </View>
         </View>
       </View>

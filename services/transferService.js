@@ -9,10 +9,6 @@ export const transferMoney = async (data) => {
     return response;
   } catch (error) {
     // Handle errors (e.g., insufficient funds, recipient not found)
-    console.error(
-      "Transfer Error 1:",
-      error.response ? error.response.data : error.message
-    );
     console.error("Transfer Error:", error.response.data.message);
     // Show error alert or message
   }
