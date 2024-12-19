@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -12,7 +12,8 @@ import { useForm, FormProvider } from "react-hook-form";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { TextInput } from "@/components/TextInput";
-
+import { requestMoney } from "@/services/requestService";
+import { getUserByCredentials } from "@/services/userService";
 const RequestMoney = () => {
   const methods = useForm({
     defaultValues: {
@@ -21,6 +22,7 @@ const RequestMoney = () => {
       item: "",
     },
   });
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { phoneNumber, amount } = useLocalSearchParams();
 
@@ -45,8 +47,33 @@ const RequestMoney = () => {
     router.push("/home");
   };
 
+  const confirmUserExistAndRequest = async (data) => {
+    try {
+      const body = {
+        identifier: "phone",
+        phone: data.number,
+      };
+      setLoading(true);
+      const user = await getUserByCredentials(body);
+      if (user) {
+        setLoading(false);
+        const response = await requestMoney({
+          recipientPhone: data.number,
+          amount: data.amount,
+        });
+        if (response.status === 200) {
+          router.push("/request-success");
+        }
+      }
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+      alert(error.message || "Something went wrong. Please try again.");
+    }
+  };
+
   const onSubmit = (data) => {
-    router.push("/request-success");
+    confirmUserExistAndRequest(data);
   };
 
   const onError = (error) => {
@@ -87,7 +114,12 @@ const RequestMoney = () => {
       </FormProvider>
 
       <Pressable
-        style={styles.button}
+        style={
+          !loading
+            ? styles.button
+            : { ...styles.button, backgroundColor: "grey" }
+        }
+        disabled={loading}
         onPress={methods.handleSubmit(onSubmit, onError)}
       >
         <Text style={styles.buttonText}>Request</Text>

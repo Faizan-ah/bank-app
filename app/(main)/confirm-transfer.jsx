@@ -61,7 +61,6 @@ const ConfirmTransfer = () => {
         const response = await transferMoney(transferData);
         if (response.status === 200) {
           const data = response.data.transactionInfo;
-          console.log(data);
           router.push({
             pathname: "/transfer-success",
             params: {
