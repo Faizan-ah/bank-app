@@ -18,7 +18,7 @@ import Button from "@/components/Button";
 import { useRouter } from "expo-router";
 import { login, register } from "@/services/authService";
 import { NIN_REGEX } from "@/utils/constants";
-import { getItem } from "@/utils/storage";
+import { getItem, saveItem } from "@/utils/storage";
 
 const Profile = () => {
   const [profilePicture, setProfilePicture] = useState(null);
@@ -44,7 +44,6 @@ const Profile = () => {
         lastName: data.lastName.trim(),
         nin: data.nin.trim(),
       });
-      console.log(response);
       if (response.status === 200) {
         const response = await login(phoneNumber, password);
         await saveItem("authToken", response.token);
