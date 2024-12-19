@@ -1,13 +1,7 @@
 import { View, Text, StyleSheet, BackHandler, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 import { TextInput } from "../../components/TextInput";
-import {
-  useForm,
-  FormProvider,
-  SubmitHandler,
-  SubmitErrorHandler,
-} from "react-hook-form";
-import { Pressable } from "react-native";
+import { useForm, FormProvider } from "react-hook-form";
 import { Link, useRouter } from "expo-router";
 import Button from "@/components/Button";
 import { login } from "@/services/authService";
@@ -16,7 +10,7 @@ import { PHONE_REGEX } from "@/utils/constants";
 const Login = () => {
   const { ...methods } = useForm();
   const router = useRouter();
-
+  const [loading, setLoading] = useState(false);
   // Handle back button press
   useEffect(() => {
     const backAction = () => {
@@ -42,12 +36,15 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     try {
+      setLoading(true);
       const { number: phoneNumber, password } = data;
-      const response = await login(phoneNumber, password);
+      const response = await login(phoneNumber, password.trim());
       await saveItem("authToken", response.token);
       await saveItem("user", response.userDto);
+      setLoading(false);
       router.push("/home");
     } catch (error) {
+      setLoading(false);
       alert(error.message || "Something went wrong. Please try again.");
     }
   };
@@ -84,6 +81,9 @@ const Login = () => {
         <View style={styles.buttonContainer}>
           <Button
             title="Login"
+            style={{ width: 130 }}
+            loading={loading}
+            disabled={loading}
             onPress={methods.handleSubmit(onSubmit, onError)}
           />
         </View>

@@ -45,7 +45,7 @@ const Profile = () => {
         nin: data.nin.trim(),
       });
       if (response.status === 200) {
-        const response = await login(phoneNumber, password);
+        const response = await login(phoneNumber, password.trim());
         await saveItem("authToken", response.token);
         await saveItem("user", response.userDto);
         setLoading(false);

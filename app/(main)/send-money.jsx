@@ -16,6 +16,8 @@ import { TextInput } from "@/components/TextInput";
 import AwesomeAlert from "react-native-awesome-alerts";
 import { getItem } from "@/utils/storage";
 import { getUserByCredentials } from "@/services/userService";
+import { NIN_REGEX } from "@/utils/constants";
+import Button from "@/components/Button";
 
 const SendMoney = () => {
   const [selectedMethod, setSelectedMethod] = useState(null);
@@ -130,7 +132,6 @@ const SendMoney = () => {
         </Pressable>
         <Text style={styles.heading}>Send Money</Text>
       </View>
-
       <View style={styles.balanceContainer}>
         <Text style={styles.label}>Available Balance</Text>
         <Text style={styles.balance}>
@@ -205,24 +206,27 @@ const SendMoney = () => {
           <TextInput
             name="nin"
             style={styles.input}
-            placeholder="Enter NIN"
-            keyboardType="numeric"
-            rules={{ required: "NIN is required!" }}
+            placeholder="Enter NIN eg. 010199023M"
+            onChangeText={(text) => methods.setValue("nin", text.toUpperCase())}
+            rules={{
+              required: "NIN is required!",
+              pattern: {
+                value: NIN_REGEX,
+                message: "Please enter a valid NIN!",
+              },
+            }}
           />
         )}
       </FormProvider>
-      <Pressable
-        style={
-          !loading
-            ? styles.button
-            : { ...styles.button, backgroundColor: "grey" }
-        }
-        disabled={loading}
-        onPress={methods.handleSubmit(onSubmit, onError)}
-      >
-        <Text style={styles.buttonText}>Next</Text>
-      </Pressable>
-
+      <View style={styles.buttonContainer}>
+        <Button
+          title="Next"
+          style={{ width: 130 }}
+          loading={loading}
+          disabled={loading}
+          onPress={methods.handleSubmit(onSubmit, onError)}
+        />
+      </View>
       <AwesomeAlert
         show={showAlert}
         showProgress={false}
@@ -307,6 +311,10 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     marginBottom: 20,
     fontSize: 10,
+  },
+  buttonContainer: {
+    marginTop: 10,
+    alignItems: "center",
   },
 });
 
