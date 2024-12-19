@@ -13,3 +13,12 @@ export const login = async (phoneNumber, password) => {
     throw error.response ? error.response.data : error.message;
   }
 };
+
+export const register = async (body) => {
+  try {
+    const response = await axios.post(`${API_URL}/users/register`, body);
+    return response;
+  } catch (error) {
+    throw error.response ? error.response.data : error.message;
+  }
+};

@@ -9,7 +9,6 @@ import { TextInput } from "@/components/TextInput";
 const VerifyPhone = () => {
   const router = useRouter();
   const methods = useForm();
-
   const onSubmit = (data) => {
     console.log("OTP Submitted: ", data);
     if (data.otp === "123456") {

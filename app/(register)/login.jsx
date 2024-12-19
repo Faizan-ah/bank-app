@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet } from "react-native";
-import React, { useState } from "react";
+import { View, Text, StyleSheet, BackHandler, Alert } from "react-native";
+import React, { useEffect, useState } from "react";
 import { TextInput } from "../../components/TextInput";
 import {
   useForm,
@@ -12,10 +12,33 @@ import { Link, useRouter } from "expo-router";
 import Button from "@/components/Button";
 import { login } from "@/services/authService";
 import { saveItem } from "@/utils/storage";
-
+import { PHONE_REGEX } from "@/utils/constants";
 const Login = () => {
   const { ...methods } = useForm();
   const router = useRouter();
+
+  // Handle back button press
+  useEffect(() => {
+    const backAction = () => {
+      Alert.alert("Exit App", "Are you sure you want to exit?", [
+        {
+          text: "Cancel",
+          onPress: () => null,
+          style: "cancel",
+        },
+        { text: "YES", onPress: () => BackHandler.exitApp() },
+      ]);
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    // Cleanup the listener on unmount
+    return () => backHandler.remove();
+  }, []);
 
   const onSubmit = async (data) => {
     try {
@@ -46,7 +69,7 @@ const Login = () => {
             rules={{
               required: "Phone number is required!",
               pattern: {
-                value: /^[+]?[1-9]\d{1,14}$/,
+                value: PHONE_REGEX,
                 message: "Please enter a valid phone number!",
               },
             }}

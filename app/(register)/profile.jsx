@@ -16,10 +16,14 @@ import { useForm, FormProvider } from "react-hook-form";
 import { TextInput } from "@/components/TextInput";
 import Button from "@/components/Button";
 import { useRouter } from "expo-router";
+import { login, register } from "@/services/authService";
+import { NIN_REGEX } from "@/utils/constants";
+import { getItem } from "@/utils/storage";
 
 const Profile = () => {
   const [profilePicture, setProfilePicture] = useState(null);
   const [fingerprintVerified, setFingerprintVerified] = useState(false);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const methods = useForm({
     defaultValues: {
@@ -29,9 +33,42 @@ const Profile = () => {
     },
   });
 
+  const signupUser = async (data) => {
+    try {
+      const signupItem = await getItem("signupCredentials");
+      const { phoneNumber, password } = signupItem;
+      const response = await register({
+        phoneNumber,
+        password,
+        firstName: data.firstName.trim(),
+        lastName: data.lastName.trim(),
+        nin: data.nin.trim(),
+      });
+      console.log(response);
+      if (response.status === 200) {
+        const response = await login(phoneNumber, password);
+        await saveItem("authToken", response.token);
+        await saveItem("user", response.userDto);
+        setLoading(false);
+        router.push("/home");
+      }
+    } catch (error) {
+      alert("Something went wrong. Please try again.");
+      router.push("/login");
+    }
+  };
+
   const onSubmit = (data) => {
-    console.log(fingerprintVerified ? { data } : "verify fingerprint");
-    router.push("/home");
+    try {
+      if (fingerprintVerified) {
+        setLoading(true);
+        signupUser(data);
+      } else {
+        alert("Please verify fingerprint first!");
+      }
+    } catch (error) {
+      alert(error.message || "Something went wrong. Please try again.");
+    }
   };
 
   const onError = (errors) => {
@@ -104,9 +141,15 @@ const Profile = () => {
           <TextInput
             name="nin"
             label="Enter your NIN"
-            placeholder="000 0000 0000"
-            keyboardType="numeric"
-            rules={{ required: "NIN is required!" }}
+            placeholder="eg. 010199023M"
+            onChangeText={(text) => methods.setValue("nin", text.toUpperCase())}
+            rules={{
+              required: "NIN is required!",
+              pattern: {
+                value: NIN_REGEX,
+                message: "Please enter a valid NIN!",
+              },
+            }}
           />
 
           <Pressable
@@ -130,6 +173,9 @@ const Profile = () => {
           <View style={styles.buttonContainer}>
             <Button
               title="Save Profile"
+              disabled={loading}
+              loading={loading}
+              style={{ width: 160 }}
               onPress={methods.handleSubmit(onSubmit, onError)}
             />
           </View>

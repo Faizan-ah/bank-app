@@ -4,17 +4,46 @@ import { useForm, FormProvider } from "react-hook-form";
 import { Link, useRouter } from "expo-router";
 import { TextInput } from "@/components/TextInput";
 import Button from "@/components/Button";
+import { PHONE_REGEX } from "@/utils/constants";
+import { getUserByCredentials } from "@/services/userService";
+import { saveItem } from "@/utils/storage";
 
 const Signup = () => {
   const router = useRouter();
-  const methods = useForm();
+  const methods = useForm({
+    defaultValues: {
+      number: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
 
-  const onSubmit = (data) => {
-    console.log({ data });
-    router.push({
-      pathname: "/add-phone",
-      params: { phone: data.number },
-    });
+  const doesUserExists = async (phone) => {
+    try {
+      const user = await getUserByCredentials({
+        identifier: "phone",
+        phone: phone,
+      });
+      return user !== null;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const onSubmit = async (data) => {
+    const userExists = await doesUserExists(data.number); // Wait for the check to complete
+    if (userExists) {
+      alert("User already exists!"); // Show alert if user exists
+    } else {
+      saveItem("signupCredentials", {
+        phoneNumber: data.number,
+        password: data.password.trim(),
+      });
+      router.push({
+        pathname: "/add-phone",
+        params: { phone: data.number },
+      });
+    }
   };
 
   const onError = (errors) => {
@@ -35,7 +64,7 @@ const Signup = () => {
             rules={{
               required: "Phone number is required!",
               pattern: {
-                value: /^[+]?[1-9]\d{1,14}$/,
+                value: PHONE_REGEX,
                 message: "Please enter a valid phone number!",
               },
             }}
@@ -44,7 +73,13 @@ const Signup = () => {
             name="password"
             label="Password"
             secureTextEntry
-            rules={{ required: "Password is required!" }}
+            rules={{
+              required: "Password is required!",
+              minLength: {
+                value: 5,
+                message: "Password must be at least 5 characters long!",
+              },
+            }}
           />
 
           <TextInput
@@ -54,7 +89,8 @@ const Signup = () => {
             rules={{
               required: "Password confirmation is required!",
               validate: (val) =>
-                methods.watch("password") === val || "Passwords do not match",
+                methods.watch("password").trim() === val.trim() ||
+                "Passwords do not match",
             }}
           />
         </FormProvider>

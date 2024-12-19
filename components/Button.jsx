@@ -1,7 +1,7 @@
 import React from "react";
-import { Pressable, Text, StyleSheet } from "react-native";
+import { Pressable, Text, StyleSheet, ActivityIndicator } from "react-native";
 
-const Button = ({ title, onPress, style, textStyle, disabled }) => {
+const Button = ({ title, onPress, loading, style, textStyle, disabled }) => {
   return (
     <Pressable
       onPress={onPress}
@@ -13,7 +13,11 @@ const Button = ({ title, onPress, style, textStyle, disabled }) => {
       ]}
       disabled={disabled}
     >
-      <Text style={[styles.text, textStyle]}>{title}</Text>
+      {loading ? (
+        <ActivityIndicator size="small" color="white" />
+      ) : (
+        <Text style={[styles.text, textStyle]}>{title}</Text>
+      )}
     </Pressable>
   );
 };

@@ -5,6 +5,7 @@ import { useForm, FormProvider } from "react-hook-form";
 import { MaterialIcons } from "@expo/vector-icons";
 import Button from "@/components/Button";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { PHONE_REGEX } from "@/utils/constants";
 
 const AddPhone = () => {
   const { phone } = useLocalSearchParams();
@@ -51,7 +52,7 @@ const AddPhone = () => {
           rules={{
             required: "Phone number is required!",
             pattern: {
-              value: /^[+]?[1-9]\d{1,14}$/,
+              value: PHONE_REGEX,
               message: "Please enter a valid phone number!",
             },
           }}
