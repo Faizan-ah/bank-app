@@ -1,25 +1,60 @@
-import React from "react";
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  ActivityIndicator,
+} from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { approveRequest } from "@/services/requestService";
 
 const TransferRequestApproval = () => {
   const router = useRouter();
-  const { senderName, amount, accountNo, status, transferCost } =
+  const { requestId, senderName, amount, accountNo, status, transferCost } =
     useLocalSearchParams();
+  const [loadingApprove, setLoadingApprove] = useState(false);
+
+  const handleBackPress = () => {
+    router.back();
+  };
+
   // Handle Cancel action
   const handleCancel = () => {
     router.push("/home"); // Navigate back to home screen
   };
 
   // Handle Approve action
-  const handleApprove = () => {
-    router.push("/transfer-success"); // Navigate to the success page
+  const handleApprove = async () => {
+    try {
+      setLoadingApprove(true);
+      const request = await approveRequest({ requestId });
+      setLoadingApprove(false);
+      console.log(request.transaction);
+      router.push({
+        pathname: "/transfer-success",
+        params: {
+          name: senderName,
+          transactionId: request.transaction.id,
+          amount: amount,
+          transactionDate: request.transaction.transaction_date,
+        },
+      });
+    } catch (error) {
+      setLoadingApprove(false);
+      alert(error.message || "Something went wrong. Please try again.");
+    }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Transfer Request</Text>
+      <View style={styles.header}>
+        <Pressable onPress={handleBackPress} style={styles.backButton}>
+          <MaterialIcons name="arrow-back" size={24} color="white" />
+        </Pressable>
+        <Text style={styles.heading}>Transfer Request</Text>
+      </View>
 
       <View style={styles.card}>
         <View style={styles.recieptHead}>
@@ -56,11 +91,23 @@ const TransferRequestApproval = () => {
 
       <View style={styles.buttonContainer}>
         <Pressable style={styles.cancelButton} onPress={handleCancel}>
-          <Text style={styles.buttonText}>CANCEL</Text>
+          <Text style={styles.buttonText}>DECLINE</Text>
         </Pressable>
 
-        <Pressable style={styles.approveButton} onPress={handleApprove}>
-          <Text style={styles.buttonText}>APPROVE</Text>
+        <Pressable
+          style={
+            !loadingApprove
+              ? styles.approveButton
+              : { ...styles.approveButton, backgroundColor: "grey" }
+          }
+          disabled={loadingApprove}
+          onPress={handleApprove}
+        >
+          {loadingApprove ? (
+            <ActivityIndicator size="small" color="white" />
+          ) : (
+            <Text style={styles.buttonText}>APPROVE</Text>
+          )}
         </Pressable>
       </View>
     </View>
@@ -76,11 +123,24 @@ const styles = StyleSheet.create({
     backgroundColor: "#f9fbfc",
     paddingTop: 80,
   },
-  title: {
+  heading: {
     fontSize: 24,
     fontWeight: "bold",
+    paddingLeft: 10,
+    paddingBottom: 2,
+  },
+  backButton: {
+    marginRight: 10,
+    paddingVertical: 4,
+    paddingHorizontal: 15,
+    borderRadius: 25,
+    backgroundColor: "#007bff",
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
     marginBottom: 40,
-    textAlign: "center",
   },
   card: {
     backgroundColor: "#1d2b5f",
@@ -119,7 +179,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   cancelButton: {
-    backgroundColor: "#6c757d",
+    backgroundColor: "red",
     padding: 15,
     borderRadius: 8,
     flex: 1,

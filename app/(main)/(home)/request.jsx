@@ -44,6 +44,7 @@ const RequestsList = () => {
     router.push({
       pathname: "/request-approval",
       params: {
+        requestId: request.id,
         senderName: request.requester_name,
         amount: request.amount,
         accountNo: request.account_number,
@@ -86,6 +87,9 @@ const RequestsList = () => {
         style={styles.requestList}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        ListEmptyComponent={
+          <Text style={styles.emptyMessage}>No pending requests.</Text>
         }
       />
     </View>
@@ -146,5 +150,11 @@ const styles = StyleSheet.create({
   },
   requestList: {
     marginTop: 20,
+  },
+  emptyMessage: {
+    textAlign: "center",
+    marginTop: 20,
+    fontSize: 16,
+    color: "#6c757d",
   },
 });

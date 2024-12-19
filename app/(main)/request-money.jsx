@@ -67,7 +67,6 @@ const RequestMoney = () => {
       }
     } catch (error) {
       setLoading(false);
-      console.log(error);
       alert(error.message || "Something went wrong. Please try again.");
     }
   };
