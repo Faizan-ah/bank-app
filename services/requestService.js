@@ -16,3 +16,17 @@ export const requestMoney = async (body) => {
     throw error.response ? error.response.data : error.message;
   }
 };
+
+export const getAllRequests = async (body) => {
+  try {
+    const token = await getItem("authToken");
+    const response = await axios.get(`${API_URL}/money-requests`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : error.message;
+  }
+};

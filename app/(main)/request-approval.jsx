@@ -1,7 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import LottieView from "lottie-react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 const TransferRequestApproval = () => {
@@ -47,11 +46,11 @@ const TransferRequestApproval = () => {
         </View> */}
         <View style={styles.detailsRow}>
           <Text style={styles.label}>Amount:</Text>
-          <Text style={styles.value}>€{amount}</Text>
+          <Text style={styles.value}>${amount}</Text>
         </View>
         <View style={styles.detailsRow}>
           <Text style={styles.label}>Transfer Cost:</Text>
-          <Text style={styles.value}>€{transferCost}</Text>
+          <Text style={styles.value}>${transferCost}</Text>
         </View>
       </View>
 

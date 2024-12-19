@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -6,42 +6,49 @@ import {
   FlatList,
   Pressable,
   TouchableOpacity,
+  RefreshControl,
 } from "react-native";
 import { useRouter } from "expo-router";
+import { getAllRequests } from "@/services/requestService";
+import { ActivityIndicator } from "react-native";
 
 const RequestsList = () => {
   const router = useRouter();
+  const [requests, setRequests] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  // Sample data for requests (you can replace this with dynamic data from an API or context)
-  const requests = [
-    {
-      id: "1",
-      senderName: "John Doe",
-      amount: 450.0,
-      status: "Pending",
-      accountNo: "+358 123 4567",
-      transferCost: 0.05,
-    },
-    {
-      id: "2",
-      senderName: "Jane Smith",
-      amount: 350.0,
-      status: "Pending",
-      accountNo: "+358 987 6543",
-      transferCost: 0.02,
-    },
-  ];
+  useEffect(() => {
+    fetchRequests();
+  }, []);
+
+  const fetchRequests = async () => {
+    try {
+      const requests = await getAllRequests();
+      setRequests(requests.requests);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.error("Error fetching requests:", error);
+    }
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchRequests();
+    setRefreshing(false);
+  };
 
   // Navigate to Transfer Request Approval screen
   const handleRequestClick = (request) => {
     router.push({
       pathname: "/request-approval",
       params: {
-        senderName: request.senderName,
+        senderName: request.requester_name,
         amount: request.amount,
-        accountNo: request.accountNo,
+        accountNo: request.account_number,
         status: request.status,
-        transferCost: request.transferCost,
+        transferCost: 0,
       },
     });
   };
@@ -49,7 +56,7 @@ const RequestsList = () => {
   // Render each request item in the list
   const renderRequestItem = ({ item }) => (
     <View style={styles.requestItem}>
-      <Text style={styles.senderName}>{item.senderName}</Text>
+      <Text style={styles.senderName}>{item.requester_name}</Text>
       <Text style={styles.amount}>Amount: {item.amount}</Text>
       <Text style={styles.status}>Status: {item.status}</Text>
 
@@ -61,7 +68,13 @@ const RequestsList = () => {
       </TouchableOpacity>
     </View>
   );
-
+  if (loading) {
+    return (
+      <View style={{ ...styles.container, justifyContent: "center" }}>
+        <ActivityIndicator size="large" color="#007bff" />
+      </View>
+    );
+  }
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Requests</Text>
@@ -71,6 +84,9 @@ const RequestsList = () => {
         renderItem={renderRequestItem}
         keyExtractor={(item) => item.id}
         style={styles.requestList}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
     </View>
   );
