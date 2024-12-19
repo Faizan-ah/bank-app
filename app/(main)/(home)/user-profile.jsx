@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -16,11 +16,14 @@ import { useForm, FormProvider } from "react-hook-form";
 import { TextInput } from "@/components/TextInput";
 import Button from "@/components/Button";
 import { useRouter } from "expo-router";
-import { removeItem } from "@/utils/storage";
+import { getItem, removeItem } from "@/utils/storage";
+import { updateUserProfile } from "@/services/userService";
+import AwesomeAlert from "react-native-awesome-alerts";
 
 const ProfilePage = () => {
   const [profilePicture, setProfilePicture] = useState(null);
   const [fingerprintVerified, setFingerprintVerified] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
   const router = useRouter();
   const methods = useForm({
     defaultValues: {
@@ -30,10 +33,41 @@ const ProfilePage = () => {
     },
   });
 
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const user = await getItem("user");
+        if (user) {
+          methods.setValue("firstName", user.first_name || "");
+          methods.setValue("lastName", user.last_name || "");
+          methods.setValue("nin", user.nin || "");
+          methods.setValue("accountNum", user.account_number || "");
+          methods.setValue("phoneNum", user.phone_number || "");
+        }
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      }
+    };
+
+    fetchUserDetails();
+  }, []);
+
+  const updateProfile = async (data) => {
+    try {
+      await updateUserProfile({
+        first_name: data.firstName,
+        last_name: data.lastName,
+      });
+      setShowAlert(true);
+    } catch (error) {
+      console.log("error", error);
+
+      alert(error.message || "Something went wrong. Please try again.");
+    }
+  };
   const onSubmit = (data) => {
-    console.log(fingerprintVerified ? { data } : "verify fingerprint");
-    alert("Profile updated successfully!");
-    router.push("/home");
+    updateProfile(data);
+    // router.push("/home");
   };
 
   const onError = (errors) => {
@@ -81,7 +115,7 @@ const ProfilePage = () => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView contentContainerStyle={styles.container}>
           <View style={styles.header}>
-            <Text style={styles.heading}> Profile</Text>
+            <Text style={styles.heading}>Profile</Text>
           </View>
 
           <View style={styles.imageContainer}>
@@ -134,6 +168,7 @@ const ProfilePage = () => {
           <View style={styles.buttonContainer}>
             <Button
               title="Save Profile"
+              style={{ width: "45%" }}
               onPress={methods.handleSubmit(onSubmit, onError)}
             />
             <Pressable onPress={handleLogout} style={styles.logoutButton}>
@@ -142,6 +177,19 @@ const ProfilePage = () => {
           </View>
         </ScrollView>
       </TouchableWithoutFeedback>
+      <AwesomeAlert
+        show={showAlert}
+        showProgress={false}
+        title="Success"
+        titleStyle={{ color: "green", fontWeight: "bold" }}
+        message="Profile updated successfully!"
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showConfirmButton={true}
+        confirmText="OKAY"
+        confirmButtonColor="#007bff"
+        onConfirmPressed={() => setShowAlert(false)}
+      />
     </FormProvider>
   );
 };
@@ -188,7 +236,10 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginTop: 20,
+    width: "100%",
     alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
   profileImage: {
     width: "100%",
@@ -197,10 +248,11 @@ const styles = StyleSheet.create({
   },
   logoutButton: {
     backgroundColor: "red",
-    padding: 15,
-    borderRadius: 8,
-    marginTop: 20,
-    width: "100%",
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 15,
+    elevation: 3,
+    width: "45%",
     alignItems: "center",
   },
   logoutText: {

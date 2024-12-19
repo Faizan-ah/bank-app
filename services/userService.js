@@ -26,3 +26,17 @@ export const getUserByCredentials = async (body) => {
     throw error.response ? error.response.data : error.message;
   }
 };
+
+export const updateUserProfile = async (body) => {
+  try {
+    const token = await getItem("authToken");
+    const response = await axios.put(`${API_URL}/users`, body, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data.user;
+  } catch (error) {
+    throw error.response ? error.response.data : error.message;
+  }
+};

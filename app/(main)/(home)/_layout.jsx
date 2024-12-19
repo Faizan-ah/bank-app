@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tabs } from "expo-router";
 import { Alert, BackHandler } from "react-native";
@@ -45,7 +45,7 @@ export default function TabLayout() {
           title: "Profile",
           headerShown: false,
           tabBarIcon: ({ color }) => (
-            <FontAwesome size={28} name="cog" color={color} />
+            <MaterialIcons name="account-circle" size={28} color={color} />
           ),
         }}
       />
