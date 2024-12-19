@@ -31,6 +31,20 @@ export const approveRequest = async (body) => {
   }
 };
 
+export const declineRequest = async (body) => {
+  try {
+    const token = await getItem("authToken");
+    const response = await axios.post(`${API_URL}/decline-request`, body, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : error.message;
+  }
+};
+
 export const getAllRequests = async (body) => {
   try {
     const token = await getItem("authToken");

@@ -8,12 +8,13 @@ import {
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { approveRequest } from "@/services/requestService";
+import { approveRequest, declineRequest } from "@/services/requestService";
 
 const TransferRequestApproval = () => {
   const router = useRouter();
   const { requestId, senderName, amount, accountNo, status, transferCost } =
     useLocalSearchParams();
+  const [loadingDecline, setLoadingDecline] = useState(false);
   const [loadingApprove, setLoadingApprove] = useState(false);
 
   const handleBackPress = () => {
@@ -21,8 +22,16 @@ const TransferRequestApproval = () => {
   };
 
   // Handle Cancel action
-  const handleCancel = () => {
-    router.push("/home"); // Navigate back to home screen
+  const handleCancel = async () => {
+    try {
+      setLoadingDecline(true);
+      await declineRequest({ requestId });
+      setLoadingDecline(false);
+      router.push("/request");
+    } catch (error) {
+      setLoadingDecline(false);
+      alert(error.message || "Something went wrong. Please try again.");
+    }
   };
 
   // Handle Approve action
@@ -90,8 +99,20 @@ const TransferRequestApproval = () => {
       </View>
 
       <View style={styles.buttonContainer}>
-        <Pressable style={styles.cancelButton} onPress={handleCancel}>
-          <Text style={styles.buttonText}>DECLINE</Text>
+        <Pressable
+          style={
+            !loadingDecline
+              ? styles.cancelButton
+              : { ...styles.cancelButton, backgroundColor: "grey" }
+          }
+          disabled={loadingDecline}
+          onPress={handleCancel}
+        >
+          {loadingDecline ? (
+            <ActivityIndicator size="small" color="white" />
+          ) : (
+            <Text style={styles.buttonText}>DECLINE</Text>
+          )}
         </Pressable>
 
         <Pressable
