@@ -8,6 +8,7 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   Image,
+  Alert,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
@@ -18,7 +19,7 @@ import Button from "@/components/Button";
 import { useRouter } from "expo-router";
 import { getItem, removeItem } from "@/utils/storage";
 import { updateUserProfile } from "@/services/userService";
-import AwesomeAlert from "react-native-awesome-alerts";
+// import AwesomeAlert from "react-native-awesome-alerts";
 
 const ProfilePage = () => {
   const [profilePicture, setProfilePicture] = useState(null);
@@ -59,6 +60,7 @@ const ProfilePage = () => {
         last_name: data.lastName,
       });
       setShowAlert(true);
+      Alert.alert("Success", "Profile updated successfully!");
     } catch (error) {
       console.log("error", error);
 
@@ -177,7 +179,7 @@ const ProfilePage = () => {
           </View>
         </ScrollView>
       </TouchableWithoutFeedback>
-      <AwesomeAlert
+      {/* <AwesomeAlert
         show={showAlert}
         showProgress={false}
         title="Success"
@@ -189,7 +191,7 @@ const ProfilePage = () => {
         confirmText="OKAY"
         confirmButtonColor="#007bff"
         onConfirmPressed={() => setShowAlert(false)}
-      />
+      /> */}
     </FormProvider>
   );
 };

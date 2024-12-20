@@ -4,7 +4,7 @@
     "slug": "bank-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/bank-app-icon.png",
+    "icon": "./assets/images/loading-icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -14,8 +14,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/loading-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/images/bank-app-icon.png"
       },
       "package": "com.faizan.ah.bankapp"
     },

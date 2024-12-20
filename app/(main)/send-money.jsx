@@ -13,11 +13,12 @@ import { MaterialIcons } from "@expo/vector-icons";
 import RNPickerSelect from "react-native-picker-select";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { TextInput } from "@/components/TextInput";
-import AwesomeAlert from "react-native-awesome-alerts";
+// import AwesomeAlert from "react-native-awesome-alerts";
 import { getItem } from "@/utils/storage";
 import { getUserByCredentials } from "@/services/userService";
 import { NIN_REGEX } from "@/utils/constants";
 import Button from "@/components/Button";
+import { Alert } from "react-native";
 
 const SendMoney = () => {
   const [selectedMethod, setSelectedMethod] = useState(null);
@@ -93,6 +94,10 @@ const SendMoney = () => {
     if (selectedMethod) {
       confirmUserExistsAndPush();
     } else {
+      Alert.alert(
+        "ERROR",
+        "Please choose a transfer method before proceeding!"
+      );
       setShowAlert(true); // Show alert when no method is selected
     }
   };
@@ -227,7 +232,7 @@ const SendMoney = () => {
           onPress={methods.handleSubmit(onSubmit, onError)}
         />
       </View>
-      <AwesomeAlert
+      {/* <AwesomeAlert
         show={showAlert}
         showProgress={false}
         title="ERROR"
@@ -239,7 +244,7 @@ const SendMoney = () => {
         confirmText="OK"
         confirmButtonColor="#007bff"
         onConfirmPressed={() => setShowAlert(false)}
-      />
+      /> */}
     </KeyboardAvoidingView>
   );
 };

@@ -9,6 +9,7 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import { useForm, FormProvider } from "react-hook-form";
 import { useRouter, useLocalSearchParams } from "expo-router";
@@ -16,7 +17,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { TextInput } from "@/components/TextInput";
 import SwipeButton from "rn-swipe-button";
 import * as LocalAuthentication from "expo-local-authentication";
-import AwesomeAlert from "react-native-awesome-alerts";
+// import AwesomeAlert from "react-native-awesome-alerts";
 import { getUserByCredentials } from "@/services/userService";
 import { transferMoney } from "@/services/transferService";
 import { getItem } from "@/utils/storage";
@@ -73,11 +74,19 @@ const ConfirmTransfer = () => {
         }
       } else {
         setShowAlert(true);
+        Alert.alert(
+          "Authentication Failed",
+          "Fingerprint authentication failed. Please try again."
+        );
         setResetSwipe(true);
       }
     } catch (error) {
       console.error(error);
       setShowAlert(true);
+      Alert.alert(
+        "Authentication Failed",
+        "Fingerprint authentication failed. Please try again."
+      );
       setResetSwipe(true);
     }
   };
@@ -141,7 +150,7 @@ const ConfirmTransfer = () => {
         </ScrollView>
       </TouchableWithoutFeedback>
 
-      <AwesomeAlert
+      {/* <AwesomeAlert
         show={showAlert}
         showProgress={false}
         title="Authentication Failed"
@@ -157,7 +166,7 @@ const ConfirmTransfer = () => {
         confirmText="OKAY"
         confirmButtonColor="#007bff"
         onConfirmPressed={() => setShowAlert(false)}
-      />
+      /> */}
     </View>
   );
 };
