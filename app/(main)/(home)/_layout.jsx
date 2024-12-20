@@ -1,9 +1,10 @@
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Tabs } from "expo-router";
+import { Tabs, usePathname } from "expo-router";
 import { Alert, BackHandler } from "react-native";
 
 export default function TabLayout() {
+  const pathname = usePathname();
   return (
     <Tabs screenOptions={{ tabBarActiveTintColor: "blue" }}>
       <Tabs.Screen
@@ -19,13 +20,19 @@ export default function TabLayout() {
           beforeRemove: (e) => {
             e.preventDefault();
             // Show confirmation before exiting the app
-            Alert.alert("Exit App", "Are you sure you want to exit the app?", [
-              {
-                text: "Cancel",
-                style: "cancel",
-              },
-              { text: "Yes", onPress: () => BackHandler.exitApp() },
-            ]);
+            if (pathname === "/home") {
+              Alert.alert(
+                "Exit App",
+                "Are you sure you want to exit the app?",
+                [
+                  {
+                    text: "Cancel",
+                    style: "cancel",
+                  },
+                  { text: "Yes", onPress: () => BackHandler.exitApp() },
+                ]
+              );
+            }
           },
         }}
       />

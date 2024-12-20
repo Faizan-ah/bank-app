@@ -13,6 +13,7 @@ import {
 import * as Contacts from "expo-contacts";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { getItem, saveItem } from "@/utils/storage";
 
 const ContactsList = () => {
   const [contacts, setContacts] = useState([]);
@@ -37,6 +38,14 @@ const ContactsList = () => {
           .sort((a, b) => a.name.localeCompare(b.name));
 
         setContacts(sortedContacts);
+
+        const user = await getItem("user");
+        const userId = user.id;
+        const storedFavourites = await getItem(`${userId}-favourites`);
+        if (storedFavourites) {
+          setFavourites(storedFavourites);
+          setSelectedFavourites(storedFavourites.map((contact) => contact.id));
+        }
       }
       setLoading(false);
     })();
@@ -63,7 +72,7 @@ const ContactsList = () => {
     });
   };
 
-  const handleAddToFavourites = () => {
+  const handleAddToFavourites = async () => {
     const selectedContacts = contacts.filter((contact) =>
       selectedFavourites.includes(contact.id)
     );
@@ -77,12 +86,17 @@ const ContactsList = () => {
       (favContact) => !selectedFavourites.includes(favContact.id)
     );
 
-    setFavourites((prevFavourites) => [
-      ...prevFavourites.filter(
+    const updatedFavourites = [
+      ...favourites.filter(
         (favContact) => !removedFavourites.includes(favContact)
       ),
       ...newFavourites,
-    ]);
+    ];
+    const user = await getItem("user");
+    // Persist updated favourites in SecureStore
+    await saveItem(`${user.id}-favourites`, updatedFavourites);
+    setFavourites(updatedFavourites);
+
     setIsSelecting(false);
   };
 
@@ -187,7 +201,9 @@ const ContactsList = () => {
           >
             <Image
               source={{
-                uri: `https://ui-avatars.com/api/?name=${contact.name}&background=random`,
+                uri: `https://ui-avatars.com/api/?name=${
+                  contact.name + " "
+                }&background=random`,
               }}
               style={styles.avatar}
             />
