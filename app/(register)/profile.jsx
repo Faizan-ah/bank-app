@@ -8,6 +8,7 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   Image,
+  Alert,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
@@ -52,7 +53,7 @@ const Profile = () => {
         router.push("/home");
       }
     } catch (error) {
-      alert("Something went wrong. Please try again.");
+      Alert.alert("Something went wrong. Please try again.");
       router.push("/login");
     }
   };
@@ -63,10 +64,13 @@ const Profile = () => {
         setLoading(true);
         signupUser(data);
       } else {
-        alert("Please verify fingerprint first!");
+        Alert.alert("Verification Error", "Please verify fingerprint first!");
       }
     } catch (error) {
-      alert(error.message || "Something went wrong. Please try again.");
+      Alert.alert(
+        "Server Error",
+        error.message || "Something went wrong. Please try again."
+      );
     }
   };
 
@@ -95,9 +99,9 @@ const Profile = () => {
 
     if (result.success) {
       setFingerprintVerified(true);
-      alert("Fingerprint authentication successful!");
+      Alert.alert("Verification", "Fingerprint authentication successful!");
     } else {
-      alert("Fingerprint authentication failed!");
+      Alert.alert("Verification Error", "Fingerprint authentication failed!");
     }
   };
 

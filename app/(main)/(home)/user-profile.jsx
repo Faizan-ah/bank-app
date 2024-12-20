@@ -97,9 +97,9 @@ const ProfilePage = () => {
 
     if (result.success) {
       setFingerprintVerified(true);
-      alert("Fingerprint authentication successful!");
+      Alert.alert("Verification", "Fingerprint authentication successful!");
     } else {
-      alert("Fingerprint authentication failed!");
+      Alert.alert("Verification Error", "Fingerprint authentication failed!");
     }
   };
 

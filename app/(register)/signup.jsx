@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Alert } from "react-native";
 import { useForm, FormProvider } from "react-hook-form";
 import { Link, useRouter } from "expo-router";
 import { TextInput } from "@/components/TextInput";
@@ -31,9 +31,9 @@ const Signup = () => {
   };
 
   const onSubmit = async (data) => {
-    const userExists = await doesUserExists(data.number); // Wait for the check to complete
+    const userExists = await doesUserExists(data.number);
     if (userExists) {
-      alert("User already exists!"); // Show alert if user exists
+      Alert.alert("User found", "This user is already present!");
     } else {
       saveItem("signupCredentials", {
         phoneNumber: data.number,
