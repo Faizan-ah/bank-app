@@ -4,7 +4,7 @@
     "slug": "bank-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/loading-icon.png",
+    "icon": "./assets/images/bank-app-icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
