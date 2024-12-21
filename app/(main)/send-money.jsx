@@ -40,8 +40,14 @@ const SendMoney = () => {
 
   useEffect(() => {
     const currentBalance = async () => {
-      const user = await getItem("user");
-      setAvailableBalance(user.balance);
+      try {
+        const user = await getItem("user");
+        if (!user) throw new Error("User data not found in storage");
+        setAvailableBalance(user.balance);
+      } catch (error) {
+        console.error("Error fetching balance:", error);
+        setAvailableBalance("0.00"); // Fallback value
+      }
     };
     currentBalance();
   }, []);
@@ -89,7 +95,7 @@ const SendMoney = () => {
       alert(error.message || "Something went wrong. Please try again.");
     }
   };
-
+  //todo: check why apk not coming here
   const onSubmit = (data) => {
     if (selectedMethod) {
       confirmUserExistsAndPush();
