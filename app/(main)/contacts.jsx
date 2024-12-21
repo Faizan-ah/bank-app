@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     paddingHorizontal: 15,
     borderRadius: 25,
-    backgroundColor: "#007bff",
+    backgroundColor: "#4E63BC",
   },
   heading: {
     fontSize: 24,

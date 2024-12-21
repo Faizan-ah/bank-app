@@ -40,6 +40,7 @@ const ControlledInput = (props) => {
     defaultValue,
     secureTextEntry,
     disabled,
+    labelStyles,
     ...inputProps
   } = props;
 
@@ -51,27 +52,30 @@ const ControlledInput = (props) => {
 
   return (
     <View style={styles.container}>
-      {label && <Text style={styles.label}>{label}</Text>}
+      {label && <Text style={[styles.label, labelStyles]}>{label}</Text>}
       <View style={styles.inputContainer}>
         <RNTextInput
-          style={[styles.input, disabled && styles.disabledInput]} // Add disabled style
+          style={[
+            styles.input,
+            disabled && styles.disabledInput,
+            errors[name] && styles.errorInput,
+          ]}
           onChangeText={field.onChange}
           onBlur={field.onBlur}
           value={field.value}
           secureTextEntry={secureTextEntry && !isPasswordVisible}
-          editable={!disabled} // Make the input field non-editable if disabled
+          editable={!disabled}
           {...inputProps}
         />
-        {secureTextEntry &&
-          !disabled && ( // Only show the password visibility icon if not disabled
-            <Pressable onPress={togglePasswordVisibility} style={styles.icon}>
-              <MaterialIcons
-                name={isPasswordVisible ? "visibility" : "visibility-off"}
-                size={24}
-                color="gray"
-              />
-            </Pressable>
-          )}
+        {secureTextEntry && !disabled && (
+          <Pressable onPress={togglePasswordVisibility} style={styles.icon}>
+            <MaterialIcons
+              name={isPasswordVisible ? "visibility" : "visibility-off"}
+              size={24}
+              color="gray"
+            />
+          </Pressable>
+        )}
       </View>
       {errors[name] && <Text style={styles.error}>{errors[name].message}</Text>}
     </View>
@@ -80,41 +84,40 @@ const ControlledInput = (props) => {
 
 const styles = StyleSheet.create({
   label: {
-    color: "black",
-    marginBottom: 10,
-    marginLeft: 0,
+    color: "grey",
+    fontSize: 14,
+    marginBottom: 4,
   },
   container: {
-    flex: -1,
-    justifyContent: "center",
     marginVertical: 8,
-    marginHorizontal: "auto",
   },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "white",
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 4,
-    width: "100%",
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc", // Default border color
+    paddingBottom: 4,
   },
   input: {
     flex: 1,
     height: 40,
-    padding: 10,
+    fontSize: 16,
+    padding: 0,
+    color: "black", // Text color
   },
   icon: {
-    paddingHorizontal: 8,
+    marginLeft: 8,
   },
   error: {
     color: "red",
     fontSize: 12,
-    marginTop: 5,
+    marginTop: 4,
+  },
+  errorInput: {
+    borderBottomColor: "red", // Highlight border in red if there's an error
   },
   disabledInput: {
-    backgroundColor: "#f0f0f0",
-    color: "#888",
-    borderColor: "#ddd",
+    backgroundColor: "transparent", // Ensure no background color
+    color: "#888", // Light gray text color
   },
 });

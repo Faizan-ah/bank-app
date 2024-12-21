@@ -1,4 +1,11 @@
-import { View, Text, StyleSheet, BackHandler, Alert } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  BackHandler,
+  Alert,
+  ScrollView,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { TextInput } from "../../components/TextInput";
 import { useForm, FormProvider } from "react-hook-form";
@@ -55,13 +62,17 @@ const Login = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.centeredContainer}>
+        <View style={styles.imageCircleContainer}>
+          <View style={styles.imageCircle1}></View>
+          <View style={styles.imageCircle2}></View>
+        </View>
         <FormProvider {...methods}>
-          <Text style={styles.heading}>Login</Text>
+          <Text style={styles.heading}>Sign In</Text>
           <TextInput
             name="number"
-            label="Number"
+            label="Phone Number"
             keyboardType="phone-pad"
             placeholder="e.g. +358123123123"
             rules={{
@@ -88,14 +99,8 @@ const Login = () => {
             onPress={methods.handleSubmit(onSubmit, onError)}
           />
         </View>
-        <View
-          style={{
-            marginHorizontal: "auto",
-            width: "65%",
-            paddingVertical: 10,
-          }}
-        >
-          <Text>
+        <View style={styles.linkContainer}>
+          <Text style={{ color: "grey" }}>
             Don't have an account?{" "}
             <Link href="/signup" style={styles.link}>
               Signup
@@ -103,7 +108,7 @@ const Login = () => {
           </Text>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -113,29 +118,47 @@ Login.options = {
 export default Login;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: "column",
-    justifyContent: "center",
-    marginHorizontal: "auto",
-    width: "100%",
-    alignItems: "center",
-    backgroundColor: "#f1f5f9",
+  scrollContainer: {
+    flexGrow: 1,
+    paddingTop: 100,
+    paddingHorizontal: 30,
+    backgroundColor: "#fff",
   },
-  centeredContainer: { width: "80%" },
+  centeredContainer: {
+    width: "100%",
+  },
   heading: {
     color: "black",
-    fontSize: 42,
+    fontSize: 36,
     fontWeight: "bold",
-    textAlign: "center",
+    marginBottom: 25,
+    textAlign: "left",
   },
   link: {
-    color: "#007bff",
+    color: "#4E63BC",
     fontWeight: "bold",
     textDecorationLine: "underline",
+  },
+  linkContainer: {
+    marginTop: 20,
+    alignItems: "center",
   },
   buttonContainer: {
     marginTop: 10,
     alignItems: "center",
+  },
+  imageCircleContainer: { flexDirection: "row", marginVertical: 5 },
+  imageCircle1: {
+    width: 50,
+    height: 50,
+    backgroundColor: "#4E63BC",
+    borderRadius: "50%",
+  },
+  imageCircle2: {
+    width: 50,
+    height: 50,
+    marginLeft: -20,
+    backgroundColor: "lightblue",
+    borderRadius: "50%",
   },
 });

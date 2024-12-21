@@ -34,35 +34,31 @@ const VerifyPhone = () => {
         </Pressable>
         <Text style={styles.heading}>Verify OTP</Text>
       </View>
-      <Text style={styles.text}>Enter the OTP sent to your phone</Text>
+      <Text style={styles.text}>Please verify your Phone Number</Text>
 
       <FormProvider {...methods}>
-        <Controller
-          name="otp"
-          control={methods.control}
-          render={({ field: { onChange, value } }) => (
-            <TextInput
-              name="otp"
-              keyboardType="numeric"
-              placeholder="Enter OTP"
-              maxLength={6}
-              value={value}
-              onChangeText={(text) => {
-                onChange(text); // Update the form state
-              }}
-              rules={{
-                required: "OTP is required!",
-                pattern: {
-                  value: /^[0-9]{6}$/,
-                  message: "Please enter a valid 6-digit OTP!",
-                },
-              }}
-            />
-          )}
-        />
+        <View style={{ width: "100%", marginTop: 30, marginBottom: 20 }}>
+          <TextInput
+            name="otp"
+            keyboardType="numeric"
+            placeholder="Enter OTP"
+            label="Enter Verification Code (6-digit)"
+            rules={{
+              required: "OTP is required!",
+              pattern: {
+                value: /^[0-9]{6}$/,
+                message: "Please enter a valid 6-digit OTP!",
+              },
+            }}
+          />
+        </View>
       </FormProvider>
       <View style={styles.buttonContainer}>
-        <Button title="Verify OTP" onPress={methods.handleSubmit(onSubmit)} />
+        <Button
+          title="Verify OTP"
+          style={{ width: 160 }}
+          onPress={methods.handleSubmit(onSubmit)}
+        />
       </View>
     </View>
   );
@@ -77,7 +73,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 80,
     paddingHorizontal: 20,
-    backgroundColor: "#f1f5f9",
+    backgroundColor: "#fff",
   },
   header: {
     flexDirection: "row",
@@ -90,7 +86,7 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     paddingHorizontal: 15,
     borderRadius: 25,
-    backgroundColor: "#007bff",
+    backgroundColor: "#4E63BC",
   },
   heading: {
     fontSize: 24,
@@ -98,9 +94,10 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
   },
   text: {
-    fontSize: 18,
+    fontSize: 16,
     marginBottom: 10,
     width: "60%",
+    color: "grey",
     textAlign: "center",
   },
   buttonContainer: {

@@ -45,22 +45,26 @@ const AddPhone = () => {
       </View>
       <Text style={styles.text}>Please confirm your mobile phone number</Text>
       <FormProvider {...methods}>
-        <TextInput
-          name="number"
-          keyboardType="phone-pad"
-          placeholder="e.g. +358123123123"
-          rules={{
-            required: "Phone number is required!",
-            pattern: {
-              value: PHONE_REGEX,
-              message: "Please enter a valid phone number!",
-            },
-          }}
-        />
+        <View style={{ width: "100%", marginTop: 30, marginBottom: 20 }}>
+          <TextInput
+            name="number"
+            label="Phone Number"
+            keyboardType="phone-pad"
+            placeholder="e.g. +358123123123"
+            rules={{
+              required: "Phone number is required!",
+              pattern: {
+                value: PHONE_REGEX,
+                message: "Please enter a valid phone number!",
+              },
+            }}
+          />
+        </View>
       </FormProvider>
       <View style={styles.buttonContainer}>
         <Button
           title="Confirm"
+          style={{ width: 160 }}
           onPress={methods.handleSubmit(onSubmit, onError)}
         />
       </View>
@@ -77,7 +81,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 80,
     paddingHorizontal: 20,
-    backgroundColor: "#f1f5f9",
+    backgroundColor: "#fff",
   },
   header: {
     flexDirection: "row",
@@ -90,7 +94,7 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     paddingHorizontal: 15,
     borderRadius: 25,
-    backgroundColor: "#007bff",
+    backgroundColor: "#4E63BC",
   },
   heading: {
     fontSize: 24,
@@ -98,9 +102,10 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
   },
   text: {
-    fontSize: 18,
+    fontSize: 16,
     marginBottom: 10,
     width: "60%",
+    color: "grey",
     textAlign: "center",
   },
   buttonContainer: {

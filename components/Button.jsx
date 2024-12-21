@@ -30,10 +30,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 15,
     elevation: 3,
-    backgroundColor: "#007bff",
+    backgroundColor: "#4E63BC",
   },
   pressed: {
-    backgroundColor: "#005bb5", // Darker shade for pressed state
+    backgroundColor: "#253ea3", // Darker shade for pressed state
   },
   disabled: {
     backgroundColor: "#cccccc", // Lighter gray for disabled state

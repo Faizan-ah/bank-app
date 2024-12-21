@@ -126,34 +126,40 @@ const Profile = () => {
               </Pressable>
             )}
           </View>
+          <View style={{ width: "100%" }}>
+            <TextInput
+              name="firstName"
+              label="First Name"
+              labelStyles={{ color: "#4E63BC", fontWeight: "bold" }}
+              placeholder="Enter First Name"
+              rules={{ required: "First name is required!" }}
+            />
 
-          <TextInput
-            name="firstName"
-            label="First Name"
-            placeholder="Enter First Name"
-            rules={{ required: "First name is required!" }}
-          />
+            <TextInput
+              name="lastName"
+              label="Last Name"
+              labelStyles={{ color: "#4E63BC", fontWeight: "bold" }}
+              placeholder="Enter Last Name"
+              rules={{ required: "Last name is required!" }}
+            />
 
-          <TextInput
-            name="lastName"
-            label="Last Name"
-            placeholder="Enter Last Name"
-            rules={{ required: "Last name is required!" }}
-          />
-
-          <TextInput
-            name="nin"
-            label="Enter your NIN"
-            placeholder="eg. 010199023M"
-            onChangeText={(text) => methods.setValue("nin", text.toUpperCase())}
-            rules={{
-              required: "NIN is required!",
-              pattern: {
-                value: NIN_REGEX,
-                message: "Please enter a valid NIN!",
-              },
-            }}
-          />
+            <TextInput
+              name="nin"
+              label="Enter your NIN"
+              labelStyles={{ color: "#4E63BC", fontWeight: "bold" }}
+              placeholder="eg. 010199023M"
+              onChangeText={(text) =>
+                methods.setValue("nin", text.toUpperCase())
+              }
+              rules={{
+                required: "NIN is required!",
+                pattern: {
+                  value: NIN_REGEX,
+                  message: "Please enter a valid NIN!",
+                },
+              }}
+            />
+          </View>
 
           <Pressable
             onPress={authenticateFingerprint}
@@ -175,10 +181,10 @@ const Profile = () => {
 
           <View style={styles.buttonContainer}>
             <Button
-              title="Save Profile"
+              title="Setup"
               disabled={loading}
               loading={loading}
-              style={{ width: 160 }}
+              style={{ width: 120 }}
               onPress={methods.handleSubmit(onSubmit, onError)}
             />
           </View>
@@ -198,7 +204,7 @@ const styles = StyleSheet.create({
     paddingTop: 40,
     paddingHorizontal: 20,
     paddingBottom: 20,
-    backgroundColor: "#f1f5f9",
+    backgroundColor: "#fff",
   },
   header: { marginVertical: 20, marginHorizontal: "auto" },
   heading: {
@@ -212,7 +218,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 20,
-    backgroundColor: "blue",
+    backgroundColor: "#4E63BC",
     borderRadius: 50,
     width: 100,
     height: 100,
