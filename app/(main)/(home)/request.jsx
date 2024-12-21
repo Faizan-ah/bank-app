@@ -11,6 +11,7 @@ import {
 import { useRouter } from "expo-router";
 import { getAllRequests } from "@/services/requestService";
 import { ActivityIndicator } from "react-native";
+import Button from "@/components/Button";
 
 const RequestsList = () => {
   const router = useRouter();
@@ -57,16 +58,14 @@ const RequestsList = () => {
   // Render each request item in the list
   const renderRequestItem = ({ item }) => (
     <View style={styles.requestItem}>
-      <Text style={styles.senderName}>{item.requester_name}</Text>
-      <Text style={styles.amount}>Amount: {item.amount}</Text>
+      <Text style={styles.senderName}>By: {item.requester_name ?? "-"}</Text>
+      <Text style={styles.amount}>Amount: ${item.amount ?? "-"}</Text>
       <Text style={styles.status}>Status: {item.status}</Text>
-
-      <TouchableOpacity
+      <Button
+        title="View Details"
         style={styles.viewDetailsButton}
         onPress={() => handleRequestClick(item)}
-      >
-        <Text style={styles.viewDetailsButtonText}>View Details</Text>
-      </TouchableOpacity>
+      />
     </View>
   );
   if (loading) {
@@ -138,15 +137,9 @@ const styles = StyleSheet.create({
   },
   viewDetailsButton: {
     marginTop: 10,
-    backgroundColor: "#007bff",
     padding: 10,
     borderRadius: 8,
     alignItems: "center",
-  },
-  viewDetailsButtonText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "bold",
   },
   requestList: {
     marginTop: 20,

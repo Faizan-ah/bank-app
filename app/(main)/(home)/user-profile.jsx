@@ -132,41 +132,43 @@ const ProfilePage = () => {
               </Pressable>
             )}
           </View>
+          <View style={styles.inputContainer}>
+            <TextInput
+              name="firstName"
+              label="First Name"
+              labelStyles={{ color: "#4E63BC", fontWeight: "bold" }}
+              placeholder="Enter First Name"
+              rules={{ required: "First name is required!" }}
+            />
 
-          <TextInput
-            name="firstName"
-            label="First Name"
-            placeholder="Enter First Name"
-            rules={{ required: "First name is required!" }}
-          />
+            <TextInput
+              name="lastName"
+              label="Last Name"
+              labelStyles={{ color: "#4E63BC", fontWeight: "bold" }}
+              placeholder="Enter Last Name"
+              rules={{ required: "Last name is required!" }}
+            />
 
-          <TextInput
-            name="lastName"
-            label="Last Name"
-            placeholder="Enter Last Name"
-            rules={{ required: "Last name is required!" }}
-          />
+            <TextInput
+              name="nin"
+              label="NIN"
+              disabled={true}
+              keyboardType="numeric"
+            />
 
-          <TextInput
-            name="nin"
-            label="NIN"
-            disabled={true}
-            keyboardType="numeric"
-          />
-
-          <TextInput
-            name="accountNum"
-            label="Account Number"
-            disabled={true}
-            keyboardType="numeric"
-          />
-          <TextInput
-            name="phoneNum"
-            label="Phone Number"
-            disabled={true}
-            keyboardType="numeric"
-          />
-
+            <TextInput
+              name="accountNum"
+              label="Account Number"
+              disabled={true}
+              keyboardType="numeric"
+            />
+            <TextInput
+              name="phoneNum"
+              label="Phone Number"
+              disabled={true}
+              keyboardType="numeric"
+            />
+          </View>
           <View style={styles.buttonContainer}>
             <Button
               title="Save Profile"
@@ -179,19 +181,6 @@ const ProfilePage = () => {
           </View>
         </ScrollView>
       </TouchableWithoutFeedback>
-      {/* <AwesomeAlert
-        show={showAlert}
-        showProgress={false}
-        title="Success"
-        titleStyle={{ color: "green", fontWeight: "bold" }}
-        message="Profile updated successfully!"
-        closeOnTouchOutside={true}
-        closeOnHardwareBackPress={false}
-        showConfirmButton={true}
-        confirmText="OKAY"
-        confirmButtonColor="#007bff"
-        onConfirmPressed={() => setShowAlert(false)}
-      /> */}
     </FormProvider>
   );
 };
@@ -220,11 +209,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 20,
-    backgroundColor: "blue",
+    backgroundColor: "#4E63BC",
     borderRadius: 50,
     width: 100,
     height: 100,
   },
+  inputContainer: { width: "100%" },
   fingerprintButton: {
     flexDirection: "row",
     alignItems: "center",
