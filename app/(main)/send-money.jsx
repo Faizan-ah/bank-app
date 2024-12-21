@@ -15,7 +15,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { TextInput } from "@/components/TextInput";
 import { getItem } from "@/utils/storage";
 import { getUserByCredentials } from "@/services/userService";
-import { NIN_REGEX } from "@/utils/constants";
+import { NIN_REGEX, PHONE_REGEX } from "@/utils/constants";
 import Button from "@/components/Button";
 import { Alert } from "react-native";
 
@@ -194,6 +194,10 @@ const SendMoney = () => {
               placeholder="Enter phone number"
               rules={{
                 required: "Phone number is required!",
+                pattern: {
+                  value: PHONE_REGEX,
+                  message: "Please enter a valid phone number!",
+                },
               }}
             />
             <TouchableOpacity onPress={handleSelectContact}>

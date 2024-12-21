@@ -14,6 +14,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { TextInput } from "@/components/TextInput";
 import { requestMoney } from "@/services/requestService";
 import { getUserByCredentials } from "@/services/userService";
+import { PHONE_REGEX } from "@/utils/constants";
 const RequestMoney = () => {
   const methods = useForm({
     defaultValues: {
@@ -97,12 +98,17 @@ const RequestMoney = () => {
           label="Phone Number"
           placeholder="Enter phone number"
           keyboardType="phone-pad"
-          rules={{ required: "Phone number is required!" }}
+          rules={{
+            required: "Phone number is required!",
+            pattern: {
+              value: PHONE_REGEX,
+              message: "Please enter a valid phone number!",
+            },
+          }}
         />
         <TouchableOpacity onPress={handleSelectContact}>
           <Text style={styles.selectContactText}>Select from Contacts</Text>
         </TouchableOpacity>
-
         <TextInput
           name="amount"
           label="Amount"
