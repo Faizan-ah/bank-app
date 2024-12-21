@@ -11,6 +11,7 @@ import {
 import { useRouter } from "expo-router";
 import { getUser } from "@/services/userService";
 import { saveItem } from "@/utils/storage";
+import Button from "@/components/Button";
 
 const Home = () => {
   const router = useRouter();
@@ -73,16 +74,21 @@ const Home = () => {
       <Text style={styles.heading}>Welcome to Your Bank</Text>
       <View style={styles.balanceContainer}>
         <Text style={styles.balanceText}>Available Balance</Text>
-        <Text style={styles.balanceAmount}>{user.balance}</Text>
+        <Text style={styles.balanceAmount}>${user.balance ?? "0.00"}</Text>
       </View>
       <View style={styles.buttonContainer}>
-        <Pressable style={styles.button} onPress={handleSendMoney}>
-          <Text style={styles.buttonText}>Send Money</Text>
-        </Pressable>
-
-        <Pressable style={styles.button} onPress={handleRequestMoney}>
-          <Text style={styles.buttonText}>Request Money</Text>
-        </Pressable>
+        <Button
+          title="Send Money"
+          style={styles.button}
+          textStyle={styles.buttonText}
+          onPress={handleSendMoney}
+        />
+        <Button
+          title="Request Money"
+          style={styles.button}
+          textStyle={styles.buttonText}
+          onPress={handleRequestMoney}
+        />
       </View>
     </ScrollView>
   );
@@ -132,20 +138,16 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 40,
     width: "100%",
-    maxWidth: 350,
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
   button: {
-    backgroundColor: "#007bff",
-    padding: 15,
-    borderRadius: 8,
-    alignItems: "center",
-    marginBottom: 15,
-    width: "100%",
+    width: 150,
+    height: 70,
   },
-
   buttonText: {
-    color: "white",
     fontSize: 18,
-    fontWeight: "bold",
+    width: 130,
+    textAlign: "center",
   },
 });
