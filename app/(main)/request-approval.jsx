@@ -9,6 +9,7 @@ import {
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { approveRequest, declineRequest } from "@/services/requestService";
+import Button from "@/components/Button";
 
 const TransferRequestApproval = () => {
   const router = useRouter();
@@ -84,10 +85,6 @@ const TransferRequestApproval = () => {
           <Text style={styles.label}>Account No:</Text>
           <Text style={styles.value}>{accountNo}</Text>
         </View>
-        {/* <View style={styles.detailsRow}>
-          <Text style={styles.label}>Items:</Text>
-          <Text style={styles.value}>View Invoice</Text>
-        </View> */}
         <View style={styles.detailsRow}>
           <Text style={styles.label}>Amount:</Text>
           <Text style={styles.value}>${amount}</Text>
@@ -99,23 +96,23 @@ const TransferRequestApproval = () => {
       </View>
 
       <View style={styles.buttonContainer}>
-        <Pressable
-          style={
-            !loadingDecline
-              ? styles.cancelButton
-              : { ...styles.cancelButton, backgroundColor: "grey" }
-          }
+        <Button
+          style={styles.cancelButton}
+          loading={loadingDecline}
           disabled={loadingDecline}
           onPress={handleCancel}
-        >
-          {loadingDecline ? (
-            <ActivityIndicator size="small" color="white" />
-          ) : (
-            <Text style={styles.buttonText}>DECLINE</Text>
-          )}
-        </Pressable>
-
-        <Pressable
+          textStyle={styles.buttonText}
+          title="DECLINE"
+        />
+        <Button
+          style={styles.approveButton}
+          loading={loadingApprove}
+          disabled={loadingApprove}
+          onPress={handleApprove}
+          textStyle={styles.buttonText}
+          title="APPROVE"
+        />
+        {/* <Pressable
           style={
             !loadingApprove
               ? styles.approveButton
@@ -129,7 +126,7 @@ const TransferRequestApproval = () => {
           ) : (
             <Text style={styles.buttonText}>APPROVE</Text>
           )}
-        </Pressable>
+        </Pressable> */}
       </View>
     </View>
   );
@@ -208,16 +205,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   approveButton: {
-    backgroundColor: "#007bff",
     padding: 15,
     borderRadius: 8,
     flex: 1,
     alignItems: "center",
   },
   buttonText: {
-    color: "white",
     fontSize: 18,
-    fontWeight: "bold",
   },
   recieptHead: {
     alignItems: "center",
