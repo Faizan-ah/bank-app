@@ -21,7 +21,7 @@ import Button from "@/components/Button";
 import { Alert } from "react-native";
 
 const SendMoney = () => {
-  const [selectedMethod, setSelectedMethod] = useState(null);
+  const [selectedMethod, setSelectedMethod] = useState("phone");
   const [showAlert, setShowAlert] = useState(false);
   const [loading, setLoading] = useState(false);
   const [availableBalance, setAvailableBalance] = useState("");
@@ -171,7 +171,7 @@ const SendMoney = () => {
           Transfer Method
         </Text>
         <View style={styles.pickerStyles}>
-          <RNPickerSelect
+          {/* <RNPickerSelect
             onValueChange={handleMethodChange}
             placeholder={{
               label: "Choose an option",
@@ -184,7 +184,7 @@ const SendMoney = () => {
               { label: "NIN", value: "nin" },
             ]}
             style={pickerStyles}
-          />
+          /> */}
         </View>
         {selectedMethod === "phone" && (
           <View>
