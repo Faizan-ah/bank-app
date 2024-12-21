@@ -10,10 +10,9 @@ import {
 } from "react-native";
 import { useForm, FormProvider } from "react-hook-form";
 import { MaterialIcons } from "@expo/vector-icons";
-import RNPickerSelect from "react-native-picker-select";
+import { Picker } from "@react-native-picker/picker";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { TextInput } from "@/components/TextInput";
-// import AwesomeAlert from "react-native-awesome-alerts";
 import { getItem } from "@/utils/storage";
 import { getUserByCredentials } from "@/services/userService";
 import { NIN_REGEX } from "@/utils/constants";
@@ -21,11 +20,9 @@ import Button from "@/components/Button";
 import { Alert } from "react-native";
 
 const SendMoney = () => {
-  const [selectedMethod, setSelectedMethod] = useState("phone");
-  const [showAlert, setShowAlert] = useState(false);
+  const [selectedMethod, setSelectedMethod] = useState(null);
   const [loading, setLoading] = useState(false);
   const [availableBalance, setAvailableBalance] = useState("");
-  const [reciever, setReciever] = useState();
 
   const methods = useForm({
     defaultValues: {
@@ -95,7 +92,7 @@ const SendMoney = () => {
       alert(error.message || "Something went wrong. Please try again.");
     }
   };
-  //todo: check why apk not coming here
+
   const onSubmit = (data) => {
     if (selectedMethod) {
       confirmUserExistsAndPush();
@@ -104,7 +101,6 @@ const SendMoney = () => {
         "ERROR",
         "Please choose a transfer method before proceeding!"
       );
-      setShowAlert(true); // Show alert when no method is selected
     }
   };
 
@@ -171,20 +167,23 @@ const SendMoney = () => {
           Transfer Method
         </Text>
         <View style={styles.pickerStyles}>
-          {/* <RNPickerSelect
+          <Picker
+            selectedValue={selectedMethod}
             onValueChange={handleMethodChange}
-            placeholder={{
-              label: "Choose an option",
-              value: null,
-            }}
-            value={selectedMethod}
-            items={[
+            style={pickerStyles}
+          >
+            {[
+              {
+                label: "Choose an option",
+                value: null,
+              },
               { label: "Phone Number", value: "phone" },
               { label: "Account Number", value: "account" },
               { label: "NIN", value: "nin" },
-            ]}
-            style={pickerStyles}
-          /> */}
+            ].map((item) => (
+              <Picker.Item label={item.label} value={item.value} />
+            ))}
+          </Picker>
         </View>
         {selectedMethod === "phone" && (
           <View>
@@ -238,19 +237,6 @@ const SendMoney = () => {
           onPress={methods.handleSubmit(onSubmit, onError)}
         />
       </View>
-      {/* <AwesomeAlert
-        show={showAlert}
-        showProgress={false}
-        title="ERROR"
-        titleStyle={{ color: "red", fontWeight: "bold" }}
-        message="Please choose a transfer method before proceeding!"
-        closeOnTouchOutside={true}
-        closeOnHardwareBackPress={false}
-        showConfirmButton={true}
-        confirmText="OK"
-        confirmButtonColor="#007bff"
-        onConfirmPressed={() => setShowAlert(false)}
-      /> */}
     </KeyboardAvoidingView>
   );
 };
